@@ -14,7 +14,6 @@ public class ChaincodeRepositoryRegistrar extends RepositoryBeanDefinitionRegist
 
 	@Override
 	protected RepositoryConfigurationExtension getExtension() {
-		// TODO Auto-generated method stub
 		return new ChaincodeRepositoryConfigurationExtension();
 	}
 
