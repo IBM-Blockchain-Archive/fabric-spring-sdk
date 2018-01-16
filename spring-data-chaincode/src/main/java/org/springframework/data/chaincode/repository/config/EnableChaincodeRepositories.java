@@ -7,6 +7,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.chaincode.repository.support.ChaincodeRepositoryFactoryBean;
@@ -54,6 +55,14 @@ public @interface EnableChaincodeRepositories {
 	 */
 	String repositoryImplementationPostfix() default "Impl";
 	
+	/**
+	 * Configures the location of where to find the Spring Data named queries properties file. Will default to
+	 * {@code META-INFO/mongo-named-queries.properties}.
+	 * 
+	 * @return
+	 */
+	String namedQueriesLocation() default "";
+
 	/**
 	 * Returns the {@link FactoryBean} class to be used for each repository instance. Defaults to
 	 * {@link CassandraRepositoryFactoryBean}.
