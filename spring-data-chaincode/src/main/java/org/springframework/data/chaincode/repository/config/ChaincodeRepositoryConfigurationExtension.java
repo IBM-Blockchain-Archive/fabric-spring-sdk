@@ -15,6 +15,7 @@ import org.springframework.data.chaincode.repository.support.ChaincodeRepository
 import org.springframework.data.repository.config.RepositoryConfiguration;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationSource;
+import org.springframework.data.repository.core.RepositoryMetadata;
 
 public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigurationExtensionSupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryConfigurationExtension.class);
@@ -51,7 +52,7 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 	public <T extends RepositoryConfigurationSource> Collection<RepositoryConfiguration<T>> getRepositoryConfigurations(
 			T configSource, ResourceLoader loader, boolean strictMatchesOnly) {
 		logger.debug("getRepositoryConfigurations for type " + configSource.getClass().getName());
-		return super.getRepositoryConfigurations(configSource, loader, strictMatchesOnly);
+		return super.getRepositoryConfigurations(configSource, loader, true);
 	}
 	
 	@Override
@@ -74,4 +75,18 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 		logger.debug("getRepositoryConfigurations ");
 		return super.getRepositoryConfigurations(configSource, loader);
 	}
+	
+	@Override
+	protected boolean isStrictRepositoryCandidate(RepositoryMetadata metadata) {
+		Class<?> repositoryInterface = metadata.getRepositoryInterface();
+		logger.debug("Checking candidate {}", repositoryInterface.getName());
+		Chaincode annotation = repositoryInterface.getAnnotation(Chaincode.class);
+		if (annotation == null) {
+			logger.debug("Checking candidate {}, don't have Chaincode annotation", repositoryInterface.getName());
+			return false;
+		}		
+		return super.isStrictRepositoryCandidate(metadata);
+	}
+	
+	
 }

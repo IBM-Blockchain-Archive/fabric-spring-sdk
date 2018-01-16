@@ -26,16 +26,8 @@ public class ChaincodeRepositoryRegistrar extends RepositoryBeanDefinitionRegist
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
 		logger.debug("Starting beans registration");
-		for (String beanName : registry.getBeanDefinitionNames()) {
-			System.out.println(beanName);
-		}
 		super.registerBeanDefinitions(annotationMetadata, registry);
 		logger.debug("Done beans registration");
-		for (String beanName : registry.getBeanDefinitionNames()) {
-			System.out.println(beanName);
-			BeanDefinition bean = registry.getBeanDefinition(beanName);
-			System.out.println(bean.getBeanClassName() + " " + bean.getFactoryBeanName() + " " + bean.getFactoryMethodName());
-		}
 	}
 
 }
