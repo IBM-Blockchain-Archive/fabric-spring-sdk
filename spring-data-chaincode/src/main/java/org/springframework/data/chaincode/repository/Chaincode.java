@@ -14,6 +14,11 @@ public @interface Chaincode {
 	 * Chaincode version 
 	 */
 	String version();
+	
+	/**
+	 * Channel chaincode instantiated on
+	 */
+	String channel();
 
 	/**
 	 * Chaincode name

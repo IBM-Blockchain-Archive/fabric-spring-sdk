@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
 import org.springframework.data.chaincode.repository.support.ChaincodeRepositoryFactoryBean;
 import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
 
@@ -75,6 +76,12 @@ public @interface EnableChaincodeRepositories {
 	 * @since 1.3
 	 */
 	Class<?> repositoryBaseClass() default DefaultRepositoryBaseClass.class;
+	
+	/**
+	 * Configures the name of the {@link ChaincodeClient} bean to be used with the repositories detected. 
+	 */
+	String chaincodeClientRef() default "chaincodeClient";
+
 
 
 }

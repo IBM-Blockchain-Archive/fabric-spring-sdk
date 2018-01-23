@@ -7,15 +7,18 @@ import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.repository.support.ChaincodeRepositoryFactoryBean;
+import org.springframework.data.repository.config.AnnotationRepositoryConfigurationSource;
 import org.springframework.data.repository.config.RepositoryConfiguration;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationSource;
 import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.util.StringUtils;
 
 public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigurationExtensionSupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryConfigurationExtension.class);
@@ -88,5 +91,16 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 		return super.isStrictRepositoryCandidate(metadata);
 	}
 	
+	
+	@Override
+	public void postProcess(BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
+		logger.debug("postProcess for AnnotationRepositoryConfigurationSource");
+		String chaincodeClientRef = config.getAttributes().getString("chaincodeClientRef");
+
+		if (StringUtils.hasText(chaincodeClientRef)) {
+			builder.addPropertyReference("chaincodeClient", chaincodeClientRef);
+		}
+
+	}
 	
 }

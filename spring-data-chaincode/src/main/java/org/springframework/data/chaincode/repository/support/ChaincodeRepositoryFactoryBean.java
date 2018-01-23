@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
@@ -20,6 +21,8 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	private RepositoryFactorySupport factory;
 
 	private T repository;
+
+	private ChaincodeClient chaincodeClient;
 	
 
 	protected ChaincodeRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
@@ -31,7 +34,7 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	@Override
 	protected RepositoryFactorySupport createRepositoryFactory() {
 		logger.debug("Getting factory for class " + repositoryInterface.getName());
-		return new ChaincodeRepositoryFactory(repositoryInterface);
+		return new ChaincodeRepositoryFactory(repositoryInterface, chaincodeClient);
 	}
 	
 	@Override
@@ -75,5 +78,10 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 		logger.debug("isSingleton for factory bean " + repositoryInterface.getName());
 		return super.isSingleton();
 	}
+	
+	public void setChaincodeClient(ChaincodeClient chaincodeClient) {
+		this.chaincodeClient = chaincodeClient;
+	}
+
 		
 }
