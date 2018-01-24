@@ -31,9 +31,6 @@ public class DefaultInterceptor implements MethodInterceptor {
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		Method method = invocation.getMethod();
 		Object[] arguments = invocation.getArguments();
-		String ccName = annotation.name();
-		String channel = annotation.channel();
-		String ccVersion = annotation.version();
 		try {
 			Method defaultImplMethod = simpleChaincodeRepository.getClass().getMethod(method.getName(), method.getParameterTypes());
 			logger.debug("Invoking {} with argiments {}", method.getName(), arguments);

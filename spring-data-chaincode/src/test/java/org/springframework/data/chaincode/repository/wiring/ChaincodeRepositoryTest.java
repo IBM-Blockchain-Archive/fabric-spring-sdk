@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -88,6 +87,15 @@ public class ChaincodeRepositoryTest {
 	
 	@Test
 	public void testCustomImpl() {
+		
+        String[] beanNames = context.getBeanDefinitionNames();
+        Arrays.sort(beanNames);
+        for (String beanName : beanNames) {
+        		
+            System.out.println(beanName + " " + context.getBean(beanName));
+        }
+
+		
 		TestRepo4 testRepo = context.getBean(TestRepo4.class);
 		
         testRepo.invokeMethod("asdf");

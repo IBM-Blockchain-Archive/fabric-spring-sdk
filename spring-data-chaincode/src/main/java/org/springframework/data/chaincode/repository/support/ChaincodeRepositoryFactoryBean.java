@@ -10,6 +10,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
+import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
 import org.springframework.data.repository.query.QueryMethod;
 
 public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
@@ -23,6 +24,8 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	private T repository;
 
 	private ChaincodeClient chaincodeClient;
+	
+	private RepositoryFragments repositoryFragments;
 	
 
 	protected ChaincodeRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
@@ -41,7 +44,7 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	public void afterPropertiesSet() {
 		logger.debug("After properties set for factory bean " + repositoryInterface.getName());
 		factory = createRepositoryFactory();
-		repository = factory.getRepository(repositoryInterface);
+		repository = factory.getRepository(repositoryInterface, repositoryFragments);
 	}
 	
 	@Override
@@ -81,6 +84,19 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	
 	public void setChaincodeClient(ChaincodeClient chaincodeClient) {
 		this.chaincodeClient = chaincodeClient;
+	}
+	
+	@Override
+	public void setCustomImplementation(Object customImplementation) {
+		logger.debug("Set custom implementation for {} object {}", repositoryInterface.getName(), customImplementation);
+		super.setCustomImplementation(customImplementation);
+	}
+	
+	@Override
+	public void setRepositoryFragments(RepositoryFragments repositoryFragments) {
+		logger.debug("Set repository fragments for {} fragments {}", repositoryInterface.getName(), repositoryFragments);
+		this.repositoryFragments = repositoryFragments;
+		super.setRepositoryFragments(repositoryFragments);
 	}
 
 		

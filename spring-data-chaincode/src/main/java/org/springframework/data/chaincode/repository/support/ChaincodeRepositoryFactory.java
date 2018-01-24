@@ -1,18 +1,26 @@
 package org.springframework.data.chaincode.repository.support;
 
+import java.lang.reflect.Method;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.EntityInformation;
+import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
-import org.springframework.transaction.interceptor.TransactionalProxy;
+import org.springframework.data.repository.query.EvaluationContextProvider;
+import org.springframework.data.repository.query.QueryLookupStrategy;
+import org.springframework.data.repository.query.RepositoryQuery;
+import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 
 public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactory.class);
@@ -56,14 +64,20 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		result.setTarget(repositoryInterface);
 		result.setInterfaces(repositoryInterface, ChaincodeRepository.class, Repository.class);
 		
+		RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
+		RepositoryInformation information = getRepositoryInformation(metadata, fragments);
+		
 		DefaultInterceptor defaultInterceptor = new DefaultInterceptor(targetRepository, repositoryInterface, chaincodeClient);
 		InvokeInterceptor invokeInterceptor = new InvokeInterceptor(repositoryInterface, chaincodeClient);
 		QueryInterceptor queryInterceptor = new QueryInterceptor(repositoryInterface, chaincodeClient);
+		FragmentsInterceptor fragmentsInterceptor = new FragmentsInterceptor(repositoryInterface, fragments); 
 		
 		result.addAdvice(invokeInterceptor);
 		result.addAdvice(queryInterceptor);
 		result.addAdvice(defaultInterceptor);
-		
+		result.addAdvice(fragmentsInterceptor);
+		logger.debug("Repository metadata for {} is {}, information is {}, has custom methods {}", repositoryInterface.getSimpleName(), metadata, information, information.hasCustomMethod());
+
 		return (T)result.getProxy(this.classLoader);
 
 	}
@@ -73,6 +87,29 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		logger.debug("Setting bean class oader");
 		this.classLoader = classLoader;
 		super.setBeanClassLoader(classLoader);
+	}
+	
+	private class ChaincodeMethodLookupStrategy implements QueryLookupStrategy {
+		
+		private ChaincodeClient chaincodeClient;
+		
+		public ChaincodeMethodLookupStrategy(ChaincodeClient chaincodeClient) {
+			this.chaincodeClient = chaincodeClient;
+		}
+
+		@Override
+		public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, ProjectionFactory factory,
+				NamedQueries namedQueries) {
+			logger.debug("Looking query for {}", method.getName());
+			return new ChaincodeRepositoryQuery(chaincodeClient, method, metadata, factory, namedQueries);
+		}
+	}
+
+	@Override
+	protected Optional<QueryLookupStrategy> getQueryLookupStrategy(Key key,
+			EvaluationContextProvider evaluationContextProvider) {
+		logger.debug("getQueryLookupStrategy");
+		return Optional.of(new ChaincodeMethodLookupStrategy(chaincodeClient));
 	}
 	
 }
