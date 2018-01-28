@@ -18,7 +18,7 @@ public @interface Chaincode {
 	/**
 	 * Channel chaincode instantiated on
 	 */
-	String channel();
+	String channel() default "";
 
 	/**
 	 * Chaincode name

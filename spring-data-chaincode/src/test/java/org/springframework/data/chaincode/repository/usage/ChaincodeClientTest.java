@@ -1,0 +1,67 @@
+package org.springframework.data.chaincode.repository.usage;
+
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.testcontainers.containers.DockerComposeContainer;
+
+@ContextConfiguration(classes = {TestConfig.class})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ChaincodeClientTest {
+	private static AnnotationConfigApplicationContext context;
+
+	   @ClassRule
+	    public static DockerComposeContainer env = new DockerComposeContainer(
+	            new File("src/test/resources/network/docker-compose.yml")
+	    )
+	            .withLocalCompose(false)
+	            .withPull(false);
+
+	   @Autowired
+	Example02 example02;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		TimeUnit.SECONDS.sleep(15);
+		context = new AnnotationConfigApplicationContext(TestConfig.class);
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		context.close();
+	}
+	
+    @Test
+    public void testExample02() throws Exception {
+  
+        String aString1 = example02.query("a");
+        String bString1 = example02.query("b");
+
+        int a1 = Integer.decode(aString1);
+        int b1 = Integer.decode(bString1);
+
+        example02.invoke("a", "b", "10");
+        String aString2 = example02.query("a");
+        String bString2 = example02.query("b");
+
+        int a2 = Integer.decode(aString2);
+        int b2 = Integer.decode(bString2);
+
+        Assert.assertEquals("", a1, a2 + 10);
+        Assert.assertEquals("", b2, b1 + 10);
+
+    }
+
+	
+
+}

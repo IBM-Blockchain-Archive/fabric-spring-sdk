@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
+import org.springframework.data.chaincode.repository.Channel;
 import org.springframework.data.chaincode.repository.support.ChaincodeRepositoryFactoryBean;
 import org.springframework.data.repository.config.AnnotationRepositoryConfigurationSource;
 import org.springframework.data.repository.config.RepositoryConfiguration;
@@ -83,11 +85,19 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 	protected boolean isStrictRepositoryCandidate(RepositoryMetadata metadata) {
 		Class<?> repositoryInterface = metadata.getRepositoryInterface();
 		logger.debug("Checking candidate {}", repositoryInterface.getName());
-		Chaincode annotation = repositoryInterface.getAnnotation(Chaincode.class);
+		Chaincode annotation = AnnotationUtils.findAnnotation(repositoryInterface, Chaincode.class);
 		if (annotation == null) {
 			logger.debug("Checking candidate {}, don't have Chaincode annotation", repositoryInterface.getName());
 			return false;
-		}		
+		}
+		
+		if (annotation.channel().isEmpty()) {
+			Channel channel =  AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
+			if (channel == null) {
+				logger.debug("Checking candidate {}, no channel defined", repositoryInterface.getName());
+			}
+		}
+		
 		return super.isStrictRepositoryCandidate(metadata);
 	}
 	

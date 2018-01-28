@@ -25,10 +25,6 @@ public class ChaincodeRepositoryTest {
 	@Qualifier("testRepo1")
 	private TestRepo1 testRepo1;
 	
-	@Autowired
-	@Qualifier("testBean")
-	private String testBean;
-
 	private static AnnotationConfigApplicationContext context;
 
 	@BeforeClass
@@ -58,7 +54,7 @@ public class ChaincodeRepositoryTest {
             System.out.println(beanName);
         }
         
-        Assert.assertNotNull(testBean);
+        Assert.assertNotNull(testRepo1);
         
         testRepo1.invokeMethod("asdf");
         testRepo1.qMethod("wert");
@@ -99,7 +95,7 @@ public class ChaincodeRepositoryTest {
 		TestRepo4 testRepo = context.getBean(TestRepo4.class);
 		
         testRepo.invokeMethod("asdf");
-        testRepo.customMethod();
+        Assert.assertArrayEquals("Wrong result for custom method call", new String[] {"customMethod"}, new String[] {testRepo.customMethod()});
         testRepo.instantiate();
 		
 	}

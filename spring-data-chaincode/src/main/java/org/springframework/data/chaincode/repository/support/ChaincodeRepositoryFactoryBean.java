@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
+import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
@@ -59,37 +59,13 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 		return repositoryInterface;
 	}
 	
-	@Override
-	public List<QueryMethod> getQueryMethods() {
-		logger.debug("getQueryMethods for factory bean " + repositoryInterface.getName());
-		return super.getQueryMethods();
-	}
-	
-	@Override
-	public RepositoryInformation getRepositoryInformation() {
-		logger.debug("getRepositoryInformation for factory bean " + repositoryInterface.getName());
-		return super.getRepositoryInformation();
-	}
-	
 	public Class<? extends T> getRepositoryInterface() {
 		logger.debug("getRepositoryInterface for factory bean " + repositoryInterface.getName());
 		return repositoryInterface;
 	}
 	
-	@Override
-	public boolean isSingleton() {
-		logger.debug("isSingleton for factory bean " + repositoryInterface.getName());
-		return super.isSingleton();
-	}
-	
 	public void setChaincodeClient(ChaincodeClient chaincodeClient) {
 		this.chaincodeClient = chaincodeClient;
-	}
-	
-	@Override
-	public void setCustomImplementation(Object customImplementation) {
-		logger.debug("Set custom implementation for {} object {}", repositoryInterface.getName(), customImplementation);
-		super.setCustomImplementation(customImplementation);
 	}
 	
 	@Override

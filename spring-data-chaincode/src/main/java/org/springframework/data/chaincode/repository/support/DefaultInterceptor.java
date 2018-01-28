@@ -7,24 +7,15 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.chaincode.repository.Chaincode;
-import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
+import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 
 public class DefaultInterceptor implements MethodInterceptor {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultInterceptor.class);
 
+	private SimpleChaincodeRepository simpleChaincodeRepository;
 
-	private SimpleChaincodeRepository<?, ?> simpleChaincodeRepository;
-	private Class<?> repositoryInterface;
-	private Chaincode annotation;
-
-
-	private ChaincodeClient chaincodeClient;
-	
-	public DefaultInterceptor(SimpleChaincodeRepository<?, ?> simpleChaincodeRepository, Class<?> repositoryInterface, ChaincodeClient chaincodeClient) {
+	public DefaultInterceptor(SimpleChaincodeRepository simpleChaincodeRepository) {
 		this.simpleChaincodeRepository = simpleChaincodeRepository;
-		this.repositoryInterface = repositoryInterface;
-		this.chaincodeClient = chaincodeClient;
-		this.annotation = repositoryInterface.getAnnotation(Chaincode.class);		
 	}
 	
 	@Override

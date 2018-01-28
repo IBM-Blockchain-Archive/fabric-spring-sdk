@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
 import org.springframework.data.chaincode.repository.support.ChaincodeRepositoryFactoryBean;
+import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
 
 @Retention(RUNTIME)

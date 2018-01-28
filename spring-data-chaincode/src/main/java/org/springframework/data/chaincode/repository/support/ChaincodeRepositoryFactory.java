@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
-import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
+import org.springframework.data.chaincode.repository.Channel;
+import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.EntityInformation;
@@ -27,7 +29,7 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 
 	private ClassLoader classLoader;
 	
-	private SimpleChaincodeRepository<?, ?> targetRepository;
+	private SimpleChaincodeRepository targetRepository;
 	private Class<?> repositoryInterface;
 
 	private ChaincodeClient chaincodeClient;
@@ -38,8 +40,13 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		logger.debug("Creating chaincode bean factory");
 		this.classLoader = org.springframework.util.ClassUtils.getDefaultClassLoader();
 		this.repositoryInterface = repositoryInterface;
-		Chaincode annotation = repositoryInterface.getAnnotation(Chaincode.class);
-		this.targetRepository = new SimpleChaincodeRepository<>(annotation.channel(), annotation.name(), annotation.version());
+		Chaincode annotation = AnnotationUtils.findAnnotation(repositoryInterface, Chaincode.class);
+		String channelName = annotation.channel();
+		Channel channel= AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
+		if (channel != null) {
+			channelName = channel.name();
+		}
+		this.targetRepository = new SimpleChaincodeRepository(channelName, annotation.name(), annotation.version(), chaincodeClient);
 	}
 
 	@Override
@@ -67,10 +74,10 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
 		RepositoryInformation information = getRepositoryInformation(metadata, fragments);
 		
-		DefaultInterceptor defaultInterceptor = new DefaultInterceptor(targetRepository, repositoryInterface, chaincodeClient);
+		DefaultInterceptor defaultInterceptor = new DefaultInterceptor(targetRepository);
 		InvokeInterceptor invokeInterceptor = new InvokeInterceptor(repositoryInterface, chaincodeClient);
 		QueryInterceptor queryInterceptor = new QueryInterceptor(repositoryInterface, chaincodeClient);
-		FragmentsInterceptor fragmentsInterceptor = new FragmentsInterceptor(repositoryInterface, fragments); 
+		FragmentsInterceptor fragmentsInterceptor = new FragmentsInterceptor(fragments); 
 		
 		result.addAdvice(invokeInterceptor);
 		result.addAdvice(queryInterceptor);

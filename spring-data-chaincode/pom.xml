@@ -101,6 +101,25 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>1.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>docker-compose</artifactId>
+			<version>0.9.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.spotify</groupId>
+			<artifactId>docker-client</artifactId>
+			<version>8.9.2</version>
+			<scope>test</scope>
+		</dependency>
+		
 
 	</dependencies>	
   <build>

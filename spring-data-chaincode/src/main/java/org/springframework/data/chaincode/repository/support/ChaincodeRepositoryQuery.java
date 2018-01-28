@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.chaincode.repository.sdk.client.ChaincodeClient;
+import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;

@@ -4,7 +4,7 @@ import org.springframework.data.chaincode.repository.ChaincodeInvoke;
 import org.springframework.data.chaincode.repository.ChaincodeQuery;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 
-public interface TestRepo2 extends ChaincodeRepository<String, String> {
+public interface TestRepo2 extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String invokeMethod(String arg1);
 	

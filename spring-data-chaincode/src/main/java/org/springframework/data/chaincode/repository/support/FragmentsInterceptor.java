@@ -13,10 +13,8 @@ public class FragmentsInterceptor implements MethodInterceptor {
 	private static final Logger logger = LoggerFactory.getLogger(FragmentsInterceptor.class);
 	
 	private RepositoryFragments fragments;
-	private Class<?> repositoryInterface;
 	
-	public FragmentsInterceptor(Class<?> repositoryInterface, RepositoryFragments fragments) {
-		this.repositoryInterface = repositoryInterface;
+	public FragmentsInterceptor(RepositoryFragments fragments) {
 		this.fragments = fragments;
 	}
 
@@ -28,7 +26,7 @@ public class FragmentsInterceptor implements MethodInterceptor {
 		try {
 			return fragments.invoke(method, arguments);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			logger.debug("Can't find fragment for method {} with arguments {}, {}", method.getName(), method.getParameterTypes(), e);
+			logger.debug("Can't find fragment for method {} with arguments {}, exception {}", method.getName(), method.getParameterTypes(), e);
 		}
 		return invocation.proceed();
 	}
