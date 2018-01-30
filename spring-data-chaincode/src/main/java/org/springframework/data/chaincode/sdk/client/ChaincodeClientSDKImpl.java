@@ -88,8 +88,8 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     @Resource(name = "peerLocations")
     private Map<String, String> peerLocations;
 
-//    @Resource(name = "eventHubLocations")
-//    private Map<String, String> eventHubLocations;
+    @Resource(name = "eventHubLocations")
+    private Map<String, String> eventHubLocations;
 
     @Autowired(required = false)
     @Qualifier("userSigningCert")
@@ -245,9 +245,9 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 channel.addPeer(client.newPeer(peer.getKey(), peer.getValue()));
             }
 
-//            for (Map.Entry<String, String> eventHub : eventHubLocations.entrySet()) {
-//                channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue()));
-//            }
+            for (Map.Entry<String, String> eventHub : eventHubLocations.entrySet()) {
+                channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue()));
+            }
             for (Map.Entry<String, String> orderer : ordererLocations.entrySet()) {
                 channel.addOrderer(client.newOrderer(orderer.getKey(), orderer.getValue()));
             }
