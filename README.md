@@ -83,24 +83,17 @@ This will find the repository interface and register a proxy object in the conta
 @Service
 public class MyService {
 
-  private final PersonRepository repository;
+  private final SimpleAssetRepository repository;
 
   @Autowired
-  public MyService(PersonRepository repository) {
+  public MyService(SimpleAssetRepository repository) {
     this.repository = repository;
   }
 
   public void doWork() {
-
-     repository.deleteAll();
-
-     Person person = new Person();
-     person.setFirstname("Oliver");
-     person.setLastname("Gierke");
-     person = repository.save(person);
-
-     List<Person> lastNameResults = repository.findByLastname("Gierke");
-     List<Person> firstNameResults = repository.findByFirstnameLike("Oli*");
+  
+  	 repository.set("a", "Hello, world");
+  	 repository.get("a");
  }
 }
 ```
