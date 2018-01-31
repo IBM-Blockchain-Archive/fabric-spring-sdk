@@ -8,8 +8,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Spring Data for Hyperledger Fabric Chaincode</name>
-    <description>Hyperledger Fabric Chaincode support for Spring Data</description>
+    <name>Spring Data for Hyperledger Fabric</name>
+    <description>Hyperledger Fabric support for Spring Data</description>
     <url></url>
 
     <!-- parent>
@@ -20,6 +20,7 @@
 
     <modules>
         <module>spring-data-chaincode</module>
+        <module>spring-data-chaincode-example</module>
     </modules>
 
     <properties>

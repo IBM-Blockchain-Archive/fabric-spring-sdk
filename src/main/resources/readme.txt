@@ -1,7 +1,7 @@
-Spring Data Cassandra 1.1.0.M1
+Spring Data Hyperledger Fabric 0.0.1
 ------------------------------
 
-Spring Data Cassandra is released under the terms of the Apache Software License Version 2.0 (see license.txt).
+Spring Data Hyperledger Fabric 0.0.1 is released under the terms of the Apache Software License Version 2.0 (see license.txt).
 
 
 DISTRIBUTION CONTENTS:

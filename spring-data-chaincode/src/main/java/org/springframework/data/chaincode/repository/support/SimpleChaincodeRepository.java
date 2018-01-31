@@ -19,6 +19,11 @@ public class SimpleChaincodeRepository implements ChaincodeRepository {
 	}
 
 	@Override
+	public boolean instantiate(String[] args) {
+		return false;
+	}
+	
+	@Override
 	public boolean instantiate() {
 		return false;
 	}

@@ -9,8 +9,8 @@
 
 	<artifactId>spring-data-chaincode</artifactId>
 
-	<name>Spring Data for Hyperledger Fabric Chaincode</name>
-	<description>Hyperledger Fabric Chaincode support for Spring Data</description>
+	<name>Spring Data for Hyperledger Fabric</name>
+	<description>Hyperledger Fabric support for Spring Data</description>
 
 	<properties>
 		<validation>1.1.0.Final</validation>
