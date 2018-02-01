@@ -8,7 +8,7 @@ import org.springframework.data.chaincode.repository.config.EnableChaincodeRepos
 
 @Configuration
 @ComponentScan
-@EnableChaincodeRepositories(basePackages = { "org.springframework.data.chaincode.repository.example" })
+@EnableChaincodeRepositories
 public class SimpleAssetConfig extends AbstractChaincodeConfiguration {
 	@Bean(name = "privateKeyLocation")
 	public String privateKeyLocation() {

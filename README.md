@@ -35,7 +35,7 @@ From chaincode user perspective, chaincode is remote piece of code, exposing set
 For example, given a [Simple Asset](http://hyperledger-fabric.readthedocs.io/en/release/chaincode4ade.html#simple-asset-chaincode) chaincode, a `SimpleAssetRepository` interface that can invoke `get` and `put` methods is shown below:
 
 ```java
-@Chaincode(channel="mychannel", name="sass", version="1.0")
+@Chaincode(channel="mychannel", name="sacc", version="1.0")
 public interface SimpleAssetRepository extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String set(String key, String value);
@@ -46,9 +46,9 @@ public interface SimpleAssetRepository extends ChaincodeRepository {
 }
 ```
 
-Each method execution will cause execution of corresponding chaincode method.
-`set` method will cause to chaincode invoke: `peer chaincode invoke -n sass -c '{"Args":["set", "a", "20"]}'`
-`get` method will cause to chaincode query: `peer chaincode query -n mycc -c '{"Args":["query","a"]}'`
+Each method execution will cause execution of corresponding chaincode method.   
+ `set()` method will cause to chaincode invoke: `peer chaincode invoke -n sacc -c '{"Args":["set", "a", "20"]}' -C mychannel`.   
+ `get()` method will cause to chaincode query: `peer chaincode query -n sacc -c '{"Args":["query","a"]}' -C mychannel`.  
 
 You can have Spring automatically create a proxy for the interface by using the following JavaConfig:
 
@@ -93,7 +93,7 @@ public class MyService {
   public void doWork() {
   
   	 repository.set("a", "Hello, world");
-  	 repository.get("a");
+  	 System.out.println(repository.get("a"));
  }
 }
 ```

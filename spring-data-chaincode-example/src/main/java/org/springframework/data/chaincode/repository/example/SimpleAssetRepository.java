@@ -5,7 +5,7 @@ import org.springframework.data.chaincode.repository.ChaincodeInvoke;
 import org.springframework.data.chaincode.repository.ChaincodeQuery;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 
-@Chaincode(channel="mychannel", name="sass", version="1.0")
+@Chaincode(channel="mychannel", name="sacc", version="1.0")
 public interface SimpleAssetRepository extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String set(String key, String value);
