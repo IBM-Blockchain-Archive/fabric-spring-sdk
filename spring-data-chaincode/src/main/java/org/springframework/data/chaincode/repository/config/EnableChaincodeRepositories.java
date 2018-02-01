@@ -1,3 +1,19 @@
+/*
+ *
+ *  Copyright 2017 IBM - All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
 package org.springframework.data.chaincode.repository.config;
 
 import static java.lang.annotation.ElementType.METHOD;
@@ -14,14 +30,20 @@ import org.springframework.data.chaincode.repository.support.ChaincodeRepository
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
 
+/**
+ * Annotation to enable Hyperleder Fabric Chaincode repositories.
+ * 
+ * @author Gennady Laventman
+ *
+ */
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD })
 @Import(ChaincodeRepositoryRegistrar.class)
 public @interface EnableChaincodeRepositories {
 	/**
 	 * Alias for the {@link #basePackages()} attribute. Allows for more concise annotation declarations e.g.:
-	 * {@code @EnableCassandraRepositories("org.my.pkg")} instead of
-	 * {@code @EnableCassandraRepositories(basePackages="org.my.pkg")}.
+	 * {@code EnableChaincodeRepositories("org.my.pkg")} instead of
+	 * {@code EnableChaincodeRepositories(basePackages="org.my.pkg")}.
 	 */
 	String[] value() default {};
 
@@ -57,8 +79,7 @@ public @interface EnableChaincodeRepositories {
 	String repositoryImplementationPostfix() default "Impl";
 	
 	/**
-	 * Configures the location of where to find the Spring Data named queries properties file. Will default to
-	 * {@code META-INFO/mongo-named-queries.properties}.
+	 * Configures the location of where to find the Spring Data named queries properties file. For consistency with spring data commons
 	 * 
 	 * @return
 	 */
@@ -66,7 +87,7 @@ public @interface EnableChaincodeRepositories {
 
 	/**
 	 * Returns the {@link FactoryBean} class to be used for each repository instance. Defaults to
-	 * {@link CassandraRepositoryFactoryBean}.
+	 * {@link ChaincodeRepositoryFactoryBean}.
 	 */
 	Class<?> repositoryFactoryBeanClass() default ChaincodeRepositoryFactoryBean.class;
 

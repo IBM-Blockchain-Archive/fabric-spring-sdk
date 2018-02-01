@@ -16,28 +16,17 @@
 
 package org.springframework.data.chaincode.sdk.client;
 
-public class InvokeException extends RuntimeException {
+import org.springframework.dao.DataAccessException;
+
+public class InvokeException extends DataAccessException {
 
 	private static final long serialVersionUID = 1L;
-
-	public InvokeException() {
-		super();
-	}
 
 	public InvokeException(String message) {
 		super(message);
 	}
 
-	public InvokeException(Throwable cause) {
-		super(cause);
-	}
-
 	public InvokeException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
-	public InvokeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
 }

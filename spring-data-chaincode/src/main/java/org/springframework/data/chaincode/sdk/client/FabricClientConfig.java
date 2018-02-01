@@ -18,7 +18,14 @@ package org.springframework.data.chaincode.sdk.client;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
 
+/**
+ * Default {@link ChaincodeClient} configuration, part of {@link AbstractChaincodeConfiguration}
+ * 
+ * @author Gennady Laventman
+ *
+ */
 @Configuration
 public class FabricClientConfig {
 	

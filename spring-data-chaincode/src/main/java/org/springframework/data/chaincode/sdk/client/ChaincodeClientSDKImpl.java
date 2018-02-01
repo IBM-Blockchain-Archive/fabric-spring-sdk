@@ -72,15 +72,9 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
     private Map<String, Channel> channels = new HashMap<>();
 
-    private Map<String, Set<String>> chaincodeListenerChannelsAndChaincodes = new HashMap<>();
-    private Set<String> blockListenerChannels = new HashSet<>();
-
     private HFClient client;
 
     private CryptoSuite cryptoSuite;
-
-//    @Autowired
-//    FabricEventsListenersRegistry listenersRegistry;
 
     @Resource(name = "ordererLocations")
     private Map<String, String> ordererLocations;
@@ -253,7 +247,6 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             }
             channel.initialize();
             channels.put(name, channel);
-            chaincodeListenerChannelsAndChaincodes.put(name, new HashSet<>());
         }
         return channels.get(name);
     }
@@ -383,79 +376,4 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         return null;
     }
     
-    @Override
-    public String instantiate(String chName, String ccName) throws InstantiateException {
-    		return null;
-    }
-
-//    @Override
-//    public void startChaincodeEventsListener(String chName, String ccName) throws EventException {
-//        if (chaincodeListenerChannelsAndChaincodes.containsKey(chName) &&
-//                chaincodeListenerChannelsAndChaincodes.get(chName).contains(ccName)) {
-//            logger.info("SDK listener for channel {} and chaincode {} already registrated", chName, ccName);
-//
-//        }
-//        try {
-//            initUserContext();
-//        } catch (InvalidArgumentException e) {
-//            logger.warn("Exception during context initiation", e);
-//            throw new EventException("Exception during context initiation", e);
-//        }
-//        logger.debug("Registrating listener for channel {} and chaincode {}", chName, ccName);
-//        try {
-//            getChannel(chName).registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
-//
-//                @Override
-//                public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
-//                    try {
-//                        listenersRegistry.invokeChaincodeEventListener(chName, ccName, chaincodeEvent);
-//                    } catch (Exception e) {
-//                        logger.warn("Exception during event passing to listener", e);
-//                        throw new EventException("Exception during event passing to listener", e);
-//                    }
-//                }
-//            });
-//            chaincodeListenerChannelsAndChaincodes.get(chName).add(ccName);
-//        } catch (InvalidArgumentException | TransactionException e) {
-//            logger.warn("Exception during event registartion", e);
-//            throw new EventException("Exception during event registartion", e);
-//        }
-//        return;
-//    }
-//
-//    @Override
-//    public void startBlockEventsListener(String chName) throws EventException {
-//        if (blockListenerChannels.contains(chName)) {
-//            logger.info("SDK listener for channel {} already registrated", chName);
-//            return;
-//        }
-//        try {
-//            initUserContext();
-//        } catch (InvalidArgumentException e) {
-//            logger.warn("Exception during context initiation", e);
-//            throw new EventException("Exception during context initiation", e);
-//        }
-//
-//        try {
-//            getChannel(chName).registerBlockListener(new BlockListener() {
-//
-//                @Override
-//                public void received(BlockEvent blockEvent) {
-//                    try {
-//                        listenersRegistry.invokeBlockEventListeners(chName, blockEvent);
-//                    } catch (Exception e) {
-//                        logger.warn("Exception during event passing to listener", e);
-//                        throw new EventException("Exception during event passing to listener", e);
-//                    }
-//                }
-//            });
-//            blockListenerChannels.add(chName);
-//        } catch (InvalidArgumentException | TransactionException e) {
-//            logger.warn("Exception during event registartion", e);
-//            throw new EventException("Exception during event registartion", e);
-//        }
-//
-//        return;
-//    }
-//
-}
+ }

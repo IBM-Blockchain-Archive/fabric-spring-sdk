@@ -1,3 +1,19 @@
+/*
+ *
+ *  Copyright 2017 IBM - All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
 package org.springframework.data.chaincode.repository.support;
 
 import java.io.Serializable;
@@ -5,6 +21,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -13,6 +31,12 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
 import org.springframework.data.repository.query.QueryMethod;
 
+/**
+ * {@Link FactoryBean} to create {@link ChaincodeRepository} instances
+ * 
+ * @author Gennady Laventman
+ *
+ */
 public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
 		extends RepositoryFactoryBeanSupport<T, S, ID> {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactoryBean.class);
@@ -27,7 +51,11 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	
 	private RepositoryFragments repositoryFragments;
 	
-
+	/**
+	 * Create new {@link ChaincodeRepositoryFactoryBean} for given repository interface
+	 * 
+	 * @param repositoryInterface - must not be {@literal null}
+	 */
 	protected ChaincodeRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
 		super(repositoryInterface);
 		logger.debug("Creating FactoryBean for class " + repositoryInterface.getName());
@@ -49,18 +77,15 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 	
 	@Override
 	public T getObject() {
-		logger.debug("getObject for factory bean " + repositoryInterface.getName());
 		return repository;
 	}
 	
 	@Override
 	public Class<? extends T> getObjectType() {
-		logger.debug("getObjectType for factory bean " + repositoryInterface.getName());
 		return repositoryInterface;
 	}
 	
 	public Class<? extends T> getRepositoryInterface() {
-		logger.debug("getRepositoryInterface for factory bean " + repositoryInterface.getName());
 		return repositoryInterface;
 	}
 	

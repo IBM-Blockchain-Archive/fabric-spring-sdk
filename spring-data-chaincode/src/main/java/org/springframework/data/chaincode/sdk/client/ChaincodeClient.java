@@ -50,27 +50,4 @@ public interface ChaincodeClient {
 	 */
 	String invokeQuery(String chName, String ccName, String ccVer, String func, String args[]) throws QueryException;
 	
-	/**
-	 * Instantiate chaincode on channel
-	 * @param chName - channel name, specified in {@link Chaincode#channel()}
-	 * @param ccName - chaincode name, specified in in {@link Chaincode#name()}, should be installed
-	 * @return - payload {@link ByteString} converted to {@link String}
-	 * @throws InstantiateException
-	 */
-	String instantiate(String chName, String ccName) throws InstantiateException;
-	
-//	/**
-//	 * Chaincode events listener for all components with {@link ChaincodeEventListener} methods and corresponding channel and chaincode
-//	 * @param chName - from {@link ChaincodeEventListener#channel()}
-//	 * @param ccName - from {@link ChaincodeEventListener#chaincode()}
-//	 */
-//	void startChaincodeEventsListener(String chName, String ccName);
-//	
-//	/**
-//	 * Block events listener for all components with {@link BlockEventListener} methods and corresponding channel
-//	 * @param chName - from {@link BlockEventListener#channel()}
-//	 */
-//	void startBlockEventsListener(String chName);
-	
-
 }
