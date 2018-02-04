@@ -16,20 +16,16 @@
 
 package org.springframework.data.chaincode.repository.support;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.core.RepositoryInformation;
+import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
-import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
-import org.springframework.data.repository.query.QueryMethod;
+
+import java.io.Serializable;
 
 /**
  * {@Link FactoryBean} to create {@link ChaincodeRepository} instances

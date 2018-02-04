@@ -16,19 +16,14 @@
 
 package org.springframework.data.chaincode.repository.support;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.repository.Channel;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -37,8 +32,11 @@ import org.springframework.data.repository.core.support.RepositoryComposition.Re
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.data.repository.query.EvaluationContextProvider;
 import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.data.repository.query.QueryLookupStrategy.Key;
+import org.springframework.data.repository.query.RepositoryQuery;
+
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
  * Factory to create {@link ChaincodeRepository} instances
@@ -93,31 +91,13 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 	@Override
 	public <T> T getRepository(Class<T> repositoryInterface, RepositoryFragments fragments) {
 		logger.debug("Creating proxy for {}, fragments {}", repositoryInterface.getSimpleName(), fragments);
-		ProxyFactory result = new ProxyFactory();
-		result.setTarget(repositoryInterface);
-		result.setInterfaces(repositoryInterface, ChaincodeRepository.class, Repository.class);
-		
-		RepositoryMetadata metadata = getRepositoryMetadata(repositoryInterface);
-		RepositoryInformation information = getRepositoryInformation(metadata, fragments);
-		
-		DefaultInterceptor defaultInterceptor = new DefaultInterceptor(targetRepository);
-		InvokeInterceptor invokeInterceptor = new InvokeInterceptor(repositoryInterface, chaincodeClient);
-		QueryInterceptor queryInterceptor = new QueryInterceptor(repositoryInterface, chaincodeClient);
-		FragmentsInterceptor fragmentsInterceptor = new FragmentsInterceptor(fragments); 
-		
-		result.addAdvice(invokeInterceptor);
-		result.addAdvice(queryInterceptor);
-		result.addAdvice(defaultInterceptor);
-		result.addAdvice(fragmentsInterceptor);
-		logger.debug("Repository metadata for {} is {}, information is {}, has custom methods {}", repositoryInterface.getSimpleName(), metadata, information, information.hasCustomMethod());
 
-		return (T)result.getProxy(this.classLoader);
-
+		return super.getRepository(repositoryInterface, fragments);
 	}
 	
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
-		logger.debug("Setting bean class oader");
+		logger.debug("Setting bean class loader");
 		this.classLoader = classLoader;
 		super.setBeanClassLoader(classLoader);
 	}

@@ -39,4 +39,10 @@ public class SimpleChaincodeRepository implements ChaincodeRepository {
 		this.chaincodeClient = ccClient;
 		
 	}
+
+	@Override
+	public String instantiate() {
+		// Check possibility of base methods
+		return "instantiated";
+	}
 }
