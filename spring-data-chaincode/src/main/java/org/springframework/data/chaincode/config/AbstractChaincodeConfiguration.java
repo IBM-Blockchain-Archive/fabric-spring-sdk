@@ -22,6 +22,7 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.chaincode.events.FabricEventsConfig;
 import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 
 /**
@@ -31,7 +32,9 @@ import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
  *
  */
 @Configuration
-@Import({ FabricClientConfig.class })
+@Import({
+		FabricClientConfig.class,
+		FabricEventsConfig.class})
 public abstract class AbstractChaincodeConfiguration {
 	/**
 	 * 

@@ -49,5 +49,19 @@ public interface ChaincodeClient {
 	 * @return - payload {@link ByteString} converted to {@link String}
 	 */
 	String invokeQuery(String chName, String ccName, String ccVer, String func, String args[]) throws QueryException;
-	
+
+	/**
+	 * Chaincode events listener for all components with {@link org.springframework.data.chaincode.events.ChaincodeEventListener} methods and corresponding channel and chaincode
+	 * @param chName - from {@link Chaincode#channel()}
+	 * @param ccName - from {@link Chaincode#name()} ()}
+	 */
+	void startChaincodeEventsListener(String chName, String ccName);
+
+	/**
+	 * Block events listener for all components with {@link org.springframework.data.chaincode.events.BlockEventListener} methods and corresponding channel
+	 * @param chName - from {@link org.springframework.data.chaincode.events.BlockEventListener#channel()}
+	 */
+	void startBlockEventsListener(String chName);
+
+
 }

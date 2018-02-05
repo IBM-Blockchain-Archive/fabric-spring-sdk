@@ -20,6 +20,15 @@ public class TestConfig {
                 return "invoked";
             }
 
+            @Override
+            public void startChaincodeEventsListener(String chName, String ccName) {
+
+            }
+
+            @Override
+            public void startBlockEventsListener(String chName) {
+
+            }
         };
     }
 

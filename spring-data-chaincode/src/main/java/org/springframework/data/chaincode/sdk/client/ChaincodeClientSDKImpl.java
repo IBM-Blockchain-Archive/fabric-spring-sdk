@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
@@ -45,14 +46,7 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.hyperledger.fabric.protos.common.Common.Status;
-import org.hyperledger.fabric.sdk.BlockEvent;
-import org.hyperledger.fabric.sdk.ChaincodeID;
-import org.hyperledger.fabric.sdk.Channel;
-import org.hyperledger.fabric.sdk.Enrollment;
-import org.hyperledger.fabric.sdk.HFClient;
-import org.hyperledger.fabric.sdk.ProposalResponse;
-import org.hyperledger.fabric.sdk.TransactionProposalRequest;
-import org.hyperledger.fabric.sdk.User;
+import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.CryptoException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
@@ -63,6 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.chaincode.events.FabricEventsListenersRegistry;
 
 public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
@@ -75,6 +70,12 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     private HFClient client;
 
     private CryptoSuite cryptoSuite;
+
+    private Map<String, Set<String>> chaincodeListenerChannelsAndChaincodes = new HashMap<>();
+    private Set<String> blockListenerChannels = new HashSet<>();
+
+    @Autowired
+    private FabricEventsListenersRegistry listenersRegistry;
 
     @Resource(name = "ordererLocations")
     private Map<String, String> ordererLocations;
@@ -375,5 +376,76 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
         return null;
     }
-    
- }
+
+    @Override
+    public void startChaincodeEventsListener(String chName, String ccName) throws EventException {
+        if (chaincodeListenerChannelsAndChaincodes.containsKey(chName) &&
+                chaincodeListenerChannelsAndChaincodes.get(chName).contains(ccName)) {
+            logger.info("SDK listener for channel {} and chaincode {} already registrated", chName, ccName);
+
+        }
+        try {
+            initUserContext();
+        } catch (InvalidArgumentException e) {
+            logger.warn("Exception during context initiation", e);
+            throw new EventException("Exception during context initiation", e);
+        }
+        logger.debug("Registrating listener for channel {} and chaincode {}", chName, ccName);
+        try {
+            getChannel(chName).registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
+
+                @Override
+                public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
+                    try {
+                        listenersRegistry.invokeChaincodeEventListener(chName, ccName, chaincodeEvent);
+                    } catch (Exception e) {
+                        logger.warn("Exception during event passing to listener", e);
+                        throw new EventException("Exception during event passing to listener", e);
+                    }
+                }
+            });
+            chaincodeListenerChannelsAndChaincodes.get(chName).add(ccName);
+        } catch (InvalidArgumentException | TransactionException e) {
+            logger.warn("Exception during event registartion", e);
+            throw new EventException("Exception during event registartion", e);
+        }
+        return;
+    }
+
+    @Override
+    public void startBlockEventsListener(String chName) throws EventException {
+        if (blockListenerChannels.contains(chName)) {
+            logger.info("SDK listener for channel {} already registrated", chName);
+            return;
+        }
+        try {
+            initUserContext();
+        } catch (InvalidArgumentException e) {
+            logger.warn("Exception during context initiation", e);
+            throw new EventException("Exception during context initiation", e);
+        }
+
+        try {
+            getChannel(chName).registerBlockListener(new BlockListener() {
+
+                @Override
+                public void received(BlockEvent blockEvent) {
+                    try {
+                        listenersRegistry.invokeBlockEventListeners(chName, blockEvent);
+                    } catch (Exception e) {
+                        logger.warn("Exception during event passing to listener", e);
+                        throw new EventException("Exception during event passing to listener", e);
+                    }
+                }
+            });
+            blockListenerChannels.add(chName);
+        } catch (InvalidArgumentException | TransactionException e) {
+            logger.warn("Exception during event registartion", e);
+            throw new EventException("Exception during event registartion", e);
+        }
+
+        return;
+    }
+
+
+}
