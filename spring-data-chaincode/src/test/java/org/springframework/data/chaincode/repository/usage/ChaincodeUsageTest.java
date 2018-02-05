@@ -33,7 +33,7 @@ import org.testcontainers.containers.DockerComposeContainer;
 
 @ContextConfiguration(classes = { TestConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ChaincodeClientTest {
+public class ChaincodeUsageTest {
 	private static AnnotationConfigApplicationContext context;
 
 	@ClassRule
@@ -42,6 +42,13 @@ public class ChaincodeClientTest {
 
 	@Autowired
 	Example02 example02;
+
+	@Autowired
+	EventsRepo eventsRepo;
+
+	@Autowired
+	ChaincodeEventsListenerComponent listener;
+
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -76,5 +83,26 @@ public class ChaincodeClientTest {
 		Assert.assertEquals("", b2, b1 + 10);
 
 	}
+
+	@Test
+	public void testEvents() throws Exception {
+		listener.blockEvents = 0;
+		listener.ccEvents = 0;
+
+		int prevEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
+
+		eventsRepo.invoke();
+
+		eventsRepo.invoke();
+
+		int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
+
+		Assert.assertEquals("", prevEvents + 2, newEvents);
+
+		Assert.assertEquals("", 2, listener.blockEvents);
+		Assert.assertEquals("", 2, listener.ccEvents);
+
+	}
+
 
 }

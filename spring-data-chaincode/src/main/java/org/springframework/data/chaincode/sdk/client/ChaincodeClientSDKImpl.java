@@ -248,6 +248,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             }
             channel.initialize();
             channels.put(name, channel);
+            chaincodeListenerChannelsAndChaincodes.put(name, new HashSet<>());
         }
         return channels.get(name);
     }

@@ -25,7 +25,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Registry that connects between beans with method annotated by {@link BlockEventListener} or {@link ChaincodeEventListener}
+ * and chaincode event listeners from SDK
+ */
 public class FabricEventsListenersRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(FabricEventsListenersRegistry.class);
 
