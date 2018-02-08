@@ -39,7 +39,7 @@
 		<hibernate.version>4.2.1.Final</hibernate.version>
 		
 		<!-- Fabric -->
-		<fabric-sdk.version>1.1.0-SNAPSHOT</fabric-sdk.version>
+		<fabric-sdk.version>1.1.0-alpha</fabric-sdk.version>
 		
 		<!-- Logging -->
 		<logback.version>1.0.13</logback.version>

@@ -18,12 +18,15 @@ package org.springframework.data.chaincode.repository.support;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.repository.Channel;
+import org.springframework.data.chaincode.repository.projection.ChaincodeProxyProjectionFactory;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -113,7 +116,7 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		@Override
 		public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, ProjectionFactory factory,
 				NamedQueries namedQueries) {
-			logger.debug("Looking query for {}", method.getName());
+			logger.debug("Looking query for {}, ProjectionFactory {}, NamedQueries {}", method.getName(), factory, namedQueries);
 			return new ChaincodeRepositoryQuery(chaincodeClient, method, metadata, factory, namedQueries);
 		}
 	}
@@ -124,5 +127,15 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		logger.debug("getQueryLookupStrategy");
 		return Optional.of(new ChaincodeMethodLookupStrategy(chaincodeClient));
 	}
-	
+
+	@Override
+	protected ProjectionFactory getProjectionFactory(ClassLoader classLoader, BeanFactory beanFactory) {
+		ChaincodeProxyProjectionFactory factory = new ChaincodeProxyProjectionFactory();
+		logger.debug("Created project factory {}", factory);
+		factory.setBeanClassLoader(classLoader);
+		factory.setBeanFactory(beanFactory);
+
+		return factory;
+	}
+
 }

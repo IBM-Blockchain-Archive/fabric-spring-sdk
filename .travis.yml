@@ -1,0 +1,21 @@
+sudo: required
+
+language: java
+
+jdk: oraclejdk8
+
+services:
+  - docker
+
+before_install:
+  - docker pull hyperledger/fabric-peer:x86_64-1.1.0-alpha
+  - docker pull hyperledger/fabric-ca:x86_64-1.1.0-alpha
+  - docker pull hyperledger/fabric-tools:x86_64-1.1.0-alpha
+  - docker pull hyperledger/fabric-couchdb:x86_64-0.4.5
+  - docker pull hyperledger/fabric-orderer:x86_64-1.1.0-alpha
+  - docker tag hyperledger/fabric-ca:x86_64-1.1.0-alpha hyperledger/fabric-ca:latest
+  - docker tag hyperledger/fabric-peer:x86_64-1.1.0-alpha hyperledger/fabric-peer:latest
+  - docker tag hyperledger/fabric-orderer:x86_64-1.1.0-alpha hyperledger/fabric-orderer:latest
+  - docker tag hyperledger/fabric-tools:x86_64-1.1.0-alpha hyperledger/fabric-tools:latest
+  - docker tag hyperledger/fabric-couchdb:x86_64-0.4.5 hyperledger/fabric-couchdb:latest
+  - docker images

@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.chaincode.repository.Chaincode;
+import org.springframework.data.chaincode.repository.Channel;
 
 import java.lang.reflect.Method;
 
@@ -39,16 +40,20 @@ public class FabricEventsAnnotationsBeanPostProcessor implements BeanPostProcess
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         for (Method method : bean.getClass().getMethods()) {
-            ChaincodeEventListener cel = method.getAnnotation(ChaincodeEventListener.class);
-            BlockEventListener bel = method.getAnnotation(BlockEventListener.class);
+            ChaincodeEventListener cel = AnnotationUtils.findAnnotation(method, ChaincodeEventListener.class);
+            BlockEventListener bel = AnnotationUtils.findAnnotation(method, BlockEventListener.class);
             if (cel != null) {
                 logger.debug("Found annotation ChaincodeEventListener in bean {} method {}", beanName, method.getName());
                 Class<?> ccClass = cel.chaincode();
                 Chaincode ccAnnotation = AnnotationUtils.findAnnotation(ccClass, Chaincode.class);
                 if (ccAnnotation != null) {
                     String ccName = ccAnnotation.name();
-                    String chName = ccAnnotation.channel();
                     String methodName = method.getName();
+                    String chName = ccAnnotation.channel();
+                    Channel chAnnotation = AnnotationUtils.findAnnotation(ccClass, Channel.class);
+                    if (chAnnotation != null) {
+                        chName = chAnnotation.name();
+                    }
                     logger.debug("Connect chaincode events for channel {} and chaincode {} to bean {} and method {}", chName, ccName, beanName, methodName);
                     registry.registerChaincodeEventListener(chName, ccName, beanName, methodName);
                 } else {

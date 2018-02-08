@@ -84,7 +84,6 @@ public class ChaincodeUsageTest {
 
 	}
 
-	@Test
 	public void testEvents() throws Exception {
 		listener.blockEvents = 0;
 		listener.ccEvents = 0;

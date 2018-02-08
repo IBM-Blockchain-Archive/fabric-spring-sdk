@@ -433,6 +433,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 public void received(BlockEvent blockEvent) {
                     try {
                         listenersRegistry.invokeBlockEventListeners(chName, blockEvent);
+                        logger.debug("Got block event for block {}", blockEvent.getBlockNumber());
                     } catch (Exception e) {
                         logger.warn("Exception during event passing to listener", e);
                         throw new EventException("Exception during event passing to listener", e);
