@@ -17,8 +17,11 @@
 package org.springframework.data.chaincode.repository.usage;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.github.dockerjava.api.model.Container;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.DockerComposeContainer;
 
 @ContextConfiguration(classes = { TestConfig.class })
@@ -52,7 +56,25 @@ public class ChaincodeUsageTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		TimeUnit.SECONDS.sleep(15);
+		for (int i = 0; i < 20; i++) {
+			List<Container> containers = DockerClientFactory.instance().client().listContainersCmd().exec();
+			AtomicBoolean exampleContainerExist = new AtomicBoolean(false);
+			AtomicBoolean eventsContainerExist = new AtomicBoolean(false);
+			containers.forEach(container -> {
+				for (String name : container.getNames()) {
+					if (name.indexOf("eventcc") != -1) {
+						eventsContainerExist.set(true);
+					}
+					if (name.indexOf("mycc") != -1) {
+						exampleContainerExist.set(true);
+					}
+				}
+			});
+			if (exampleContainerExist.get() && eventsContainerExist.get()) {
+				break;
+			}
+			TimeUnit.SECONDS.sleep(10);
+		}
 		context = new AnnotationConfigApplicationContext(TestConfig.class);
 	}
 
