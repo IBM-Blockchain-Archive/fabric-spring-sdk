@@ -51,7 +51,7 @@ public class ChaincodeEventTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	@Test
+
 	public void testEvents() throws Exception {
 		listener.blockEvents = 0;
 		listener.ccEvents = 0;
