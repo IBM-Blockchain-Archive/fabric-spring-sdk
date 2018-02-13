@@ -21,19 +21,38 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FabricEventsConfig {
-	@Bean
+
+	private FabricEventsAnnotationsBeanPostProcessor fabricEventsAnnotationsBeanPostProcessor;
+	private FabricEventsPostInitContextListener fabricEventsPostInitContextListener;
+	private FabricEventsListenersRegistry fabricEventsListenersRegistry;
+
+	public FabricEventsConfig() {
+		System.out.println("Instantiating FabricEventsConfig");
+	}
+
+	@Bean(name = "chaincodeEventListenerAnnotationBeanPostProcessor")
 	public FabricEventsAnnotationsBeanPostProcessor chaincodeEventListenerAnnotationBeanPostProcessor() {
-		return new FabricEventsAnnotationsBeanPostProcessor(); 
+		if (fabricEventsAnnotationsBeanPostProcessor == null) {
+			fabricEventsAnnotationsBeanPostProcessor = new FabricEventsAnnotationsBeanPostProcessor();
+		}
+		return fabricEventsAnnotationsBeanPostProcessor;
 	}
 	
-	@Bean
+	@Bean(name = "fabricEventsPostInitContextListener")
 	public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
-		return new FabricEventsPostInitContextListener();
+		if (fabricEventsPostInitContextListener == null) {
+			fabricEventsPostInitContextListener = new FabricEventsPostInitContextListener();
+		}
+		return fabricEventsPostInitContextListener;
 	}
 	
-	@Bean
+	@Bean(name = "fabricEventsListenersRegistry")
 	public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
-		return new FabricEventsListenersRegistry();
+		if (fabricEventsListenersRegistry == null) {
+			System.out.println("Creating new fabricEventsListenersRegistry");
+			fabricEventsListenersRegistry = new FabricEventsListenersRegistry();
+		}
+		return fabricEventsListenersRegistry;
 	}
 
 }

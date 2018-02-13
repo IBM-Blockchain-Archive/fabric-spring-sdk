@@ -170,6 +170,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     }
 
     public ChaincodeClientSDKImpl() throws InitException {
+        logger.debug("Creating new instance of ChaincodeClientSDKImpl");
         try {
             // Create client and set default crypto suite
             cryptoSuite = CryptoSuite.Factory.getCryptoSuite();

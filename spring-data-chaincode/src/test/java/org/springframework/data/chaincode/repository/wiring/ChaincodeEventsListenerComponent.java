@@ -20,7 +20,6 @@ import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.ChaincodeEvent;
 import org.springframework.data.chaincode.events.BlockEventListener;
 import org.springframework.data.chaincode.events.ChaincodeEventListener;
-import org.springframework.data.chaincode.repository.usage.EventsRepo;
 import org.springframework.stereotype.Component;
 
 @Component

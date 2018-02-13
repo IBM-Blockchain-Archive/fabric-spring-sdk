@@ -49,11 +49,12 @@ public class FabricEventsListenersRegistry {
 		if (!isBlockEventListenerExist(entry)) {
 			blockEventListeners.add(entry);
 		} else {
-			logger.warn("Listener for channel {} bean {} method {} already exist", chName, beanName, methodName);			
+			logger.warn("Listener for channel {} bean {} method {} already exist", chName, beanName, methodName);
 		}			
 	}
 	
 	public void invokeChaincodeEventListener(String chName, String ccName, ChaincodeEvent event) throws Exception {
+		logger.debug("Invoking chaincode event listeners for channel {}, chaincode {} listeners number {}", chName, ccName, blockEventListeners.size());
 		for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
 			if (listenerEntry.chName.equals(chName) && 
 					listenerEntry.ccName.equals(ccName) ) {
@@ -64,6 +65,7 @@ public class FabricEventsListenersRegistry {
 	}
 
 	public void invokeBlockEventListeners(String chName, BlockEvent event) throws Exception {
+		logger.debug("Invoking block event listeners for channel {}, listeners number {}", chName, blockEventListeners.size());
 		for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
 			if (listenerEntry.chName.equals(chName)) {
 				logger.debug("Listener entry for channel {} invoked using bean {} method {}", chName, listenerEntry.beanName, listenerEntry.methodName);
@@ -103,12 +105,15 @@ public class FabricEventsListenersRegistry {
 		
 		Method method;
 		Object bean;
+
+		boolean registrated;
 		
 		public ChaincodeEventListenerEntry(String chName, String ccName, String beanName, String methodName) {
 			this.chName = chName;
 			this.ccName = ccName;
 			this.beanName = beanName;
 			this.methodName = methodName;
+			this.registrated = false;
 		}
 	}
 	
@@ -120,10 +125,14 @@ public class FabricEventsListenersRegistry {
 		Method method;
 		Object bean;
 
+		boolean registrated;
+
 		public BlockEventListenerEntry(String chName, String beanName, String methodName) {
 			this.chName = chName;
 			this.beanName = beanName;
 			this.methodName = methodName;
+			this.registrated = false;
+
 		}
 	}
 

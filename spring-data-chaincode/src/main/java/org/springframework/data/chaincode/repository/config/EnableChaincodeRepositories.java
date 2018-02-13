@@ -16,7 +16,6 @@
 
 package org.springframework.data.chaincode.repository.config;
 
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -37,7 +36,7 @@ import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
  *
  */
 @Retention(RUNTIME)
-@Target({ TYPE, METHOD })
+@Target(TYPE)
 @Import(ChaincodeRepositoryRegistrar.class)
 public @interface EnableChaincodeRepositories {
 	/**
@@ -102,7 +101,5 @@ public @interface EnableChaincodeRepositories {
 	 * Configures the name of the {@link ChaincodeClient} bean to be used with the repositories detected. 
 	 */
 	String chaincodeClientRef() default "chaincodeClient";
-
-
 
 }

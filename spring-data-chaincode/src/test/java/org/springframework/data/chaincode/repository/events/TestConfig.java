@@ -14,14 +14,17 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.usage;
+package org.springframework.data.chaincode.repository.events;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
+import org.springframework.data.chaincode.events.FabricEventsConfig;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
+import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,8 +32,17 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 @Configuration
-@ComponentScan
-@EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.usage"})
+@ComponentScan(excludeFilters = {
+		@ComponentScan.Filter(
+				type = FilterType.ASSIGNABLE_TYPE,
+			value = {
+				FabricEventsConfig.class,
+				FabricClientConfig.class
+
+			}
+		)
+})
+@EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.events"})
 public class TestConfig extends AbstractChaincodeConfiguration{
 	@Bean (name = "privateKeyLocation") 
 	public String privateKeyLocation() {

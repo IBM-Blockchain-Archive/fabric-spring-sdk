@@ -42,13 +42,18 @@ public class FabricEventsPostInitContextListener implements ApplicationListener<
 	private ChaincodeClient chaincodeClient;
 
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	synchronized public void onApplicationEvent(ContextRefreshedEvent event) {
+		logger.debug("Handling events listener registry on event {}, block listeners {}, chaincode listeners {}", event, registry.blockEventListeners.size(), registry.chaincodeEventListeners.size());
 		Set<String> channelsToRegister = new HashSet<>();
 		Map<String, Set<String>> chaincodesToRegister = new HashMap<>();
 		
 		ApplicationContext context = event.getApplicationContext();
 		for (FabricEventsListenersRegistry.BlockEventListenerEntry entry : registry.blockEventListeners) {
 			logger.debug("Looking for bean {} method {} to listen to block events in channel {}", entry.beanName, entry.methodName, entry.chName);
+			if (entry.registrated) {
+				logger.debug("Bean {} method {} to listen to block events in channel {} already registrated", entry.beanName, entry.methodName, entry.chName);
+				continue;
+			}
 			Object bean = context.getBean(entry.beanName);
 			if (bean != null) {
 				Method method;
@@ -62,12 +67,18 @@ public class FabricEventsPostInitContextListener implements ApplicationListener<
 				entry.method = method;
 			} else {
 				logger.warn("Can't find bean {}", entry.beanName);
+				continue;
 			}
+			entry.registrated = true;
 			channelsToRegister.add(entry.chName);
 		}
-		
+
 		for (FabricEventsListenersRegistry.ChaincodeEventListenerEntry entry : registry.chaincodeEventListeners) {
 			logger.debug("Looking for bean {} method {} to listen to chaincode events in channel {} chaincode {}", entry.beanName, entry.methodName, entry.chName, entry.ccName);
+			if (entry.registrated) {
+				logger.debug("Bean {} method {} to listen to chaincode events in channel {} chaincode {} already registrated", entry.beanName, entry.methodName, entry.chName, entry.ccName);
+				continue;
+			}
 			Object bean = context.getBean(entry.beanName);
 			if (bean != null) {
 				Method method;
@@ -81,10 +92,12 @@ public class FabricEventsPostInitContextListener implements ApplicationListener<
 				entry.method = method;
 			} else {
 				logger.warn("Can't find bean {}", entry.beanName);
+				continue;
 			}
 			if (!chaincodesToRegister.containsKey(entry.chName)) {
 				chaincodesToRegister.put(entry.chName, new HashSet<>());
 			}
+			entry.registrated = true;
 			chaincodesToRegister.get(entry.chName).add(entry.ccName);
 		}
 		

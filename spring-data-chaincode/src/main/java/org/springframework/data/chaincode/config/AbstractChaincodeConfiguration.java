@@ -22,7 +22,10 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.chaincode.events.FabricEventsAnnotationsBeanPostProcessor;
 import org.springframework.data.chaincode.events.FabricEventsConfig;
+import org.springframework.data.chaincode.events.FabricEventsListenersRegistry;
+import org.springframework.data.chaincode.events.FabricEventsPostInitContextListener;
 import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 
 /**
@@ -32,9 +35,7 @@ import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
  *
  */
 @Configuration
-@Import({
-		FabricClientConfig.class,
-		FabricEventsConfig.class})
+@Import({FabricClientConfig.class, FabricEventsConfig.class})
 public abstract class AbstractChaincodeConfiguration {
 	/**
 	 * 
@@ -68,6 +69,8 @@ public abstract class AbstractChaincodeConfiguration {
 		res.put("peer0", "grpc://localhost:7053");
 		return res;		
 	}
+
+
 
 
 }

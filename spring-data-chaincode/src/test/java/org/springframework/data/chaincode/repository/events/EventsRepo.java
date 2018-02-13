@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.usage;
+package org.springframework.data.chaincode.repository.events;
 
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeInvoke;
@@ -24,9 +24,9 @@ import org.springframework.data.chaincode.repository.ChaincodeRepository;
 @Chaincode(channel = "mychannel", name = "eventcc", version = "1.0")
 public interface EventsRepo extends ChaincodeRepository {
 	@ChaincodeInvoke
-	public String invoke();
+	String invoke();
 	
 	@ChaincodeQuery
-	public String query();
+	String query();
 
 }

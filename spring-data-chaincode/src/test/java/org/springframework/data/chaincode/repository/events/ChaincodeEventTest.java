@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.usage;
+package org.springframework.data.chaincode.repository.events;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -29,13 +29,18 @@ import java.io.File;
 
 @ContextConfiguration(classes = { TestConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ChaincodeUsageTest {
+public class ChaincodeEventTest {
+
 	@ClassRule
 	public static DockerComposeContainer env = new DockerComposeContainer(
 			new File("src/test/resources/network/docker-compose.yml")).withLocalCompose(false).withPull(false);
 
 	@Autowired
-	Example02 example02;
+    EventsRepo eventsRepo;
+
+	@Autowired
+    ChaincodeEventsListenerComponent listener;
+
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -47,25 +52,22 @@ public class ChaincodeUsageTest {
 	}
 
 	@Test
-	public void testExample02() throws Exception {
-		
-		Assert.assertNotNull(example02);
+	public void testEvents() throws Exception {
+		listener.blockEvents = 0;
+		listener.ccEvents = 0;
 
-		String aString1 = example02.query("a");
-		String bString1 = example02.query("b");
+		int prevEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		int a1 = Integer.decode(aString1);
-		int b1 = Integer.decode(bString1);
+		eventsRepo.invoke();
 
-		example02.invoke("a", "b", "10");
-		String aString2 = example02.query("a");
-		String bString2 = example02.query("b");
+		eventsRepo.invoke();
 
-		int a2 = Integer.decode(aString2);
-		int b2 = Integer.decode(bString2);
+		int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		Assert.assertEquals("", a1, a2 + 10);
-		Assert.assertEquals("", b2, b1 + 10);
+		Assert.assertEquals("", prevEvents + 2, newEvents);
+
+		Assert.assertEquals("", 2, listener.blockEvents);
+		Assert.assertEquals("", 2, listener.ccEvents);
 
 	}
 

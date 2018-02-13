@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.usage;
+package org.springframework.data.chaincode.repository.events;
 
 import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.ChaincodeEvent;
