@@ -380,25 +380,34 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     }
 
     @Override
-    public void startChaincodeEventsListener(String chName, String ccName) throws EventException {
+    public void startChaincodeEventsListener(final String chName, final String ccName) throws EventException {
         if (chaincodeListenerChannelsAndChaincodes.containsKey(chName) &&
                 chaincodeListenerChannelsAndChaincodes.get(chName).contains(ccName)) {
             logger.info("SDK listener for channel {} and chaincode {} already registrated", chName, ccName);
-
         }
+
         try {
             initUserContext();
         } catch (InvalidArgumentException e) {
             logger.warn("Exception during context initiation", e);
             throw new EventException("Exception during context initiation", e);
         }
+        final Map<String, Long> handledChaincodeEvents = new HashMap<>();
+
         logger.debug("Registrating listener for channel {} and chaincode {}", chName, ccName);
         try {
-            getChannel(chName).registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
+            final Channel channel = getChannel(chName);
+            channel.registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
 
                 @Override
-                public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
+               synchronized public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
                     try {
+                        if (!handledChaincodeEvents.containsKey(chaincodeEvent.getTxId())) {
+                            handledChaincodeEvents.put(chaincodeEvent.getTxId(), (long)0);
+                        }
+                        handledChaincodeEvents.put(chaincodeEvent.getTxId(), handledChaincodeEvents.get(chaincodeEvent.getTxId()) + 1);
+                        String es = blockEvent.getPeer() != null ? blockEvent.getPeer().getName() : blockEvent.getEventHub().getName();
+                        logger.debug("Handling event for Tx {} chaincode {} channel {} from peer {}, event hubs in channel {}, peers in channel {} - {} time", chaincodeEvent.getTxId(), chaincodeEvent.getChaincodeId(), blockEvent.getChannelId(), es, channel.getEventHubs(), channel.getPeers(), handledChaincodeEvents.get(chaincodeEvent.getTxId()));
                         listenersRegistry.invokeChaincodeEventListener(chName, ccName, chaincodeEvent);
                     } catch (Exception e) {
                         logger.warn("Exception during event passing to listener", e);
@@ -408,14 +417,14 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             });
             chaincodeListenerChannelsAndChaincodes.get(chName).add(ccName);
         } catch (InvalidArgumentException | TransactionException e) {
-            logger.warn("Exception during event registartion", e);
-            throw new EventException("Exception during event registartion", e);
+            logger.warn("Exception during event registration", e);
+            throw new EventException("Exception during event registration", e);
         }
         return;
     }
 
     @Override
-    public void startBlockEventsListener(String chName) throws EventException {
+    public void startBlockEventsListener(final String chName) throws EventException {
         if (blockListenerChannels.contains(chName)) {
             logger.info("SDK listener for channel {} already registrated", chName);
             return;
@@ -427,14 +436,21 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             throw new EventException("Exception during context initiation", e);
         }
 
+        final Map<Long, Long> handledBlockEvents = new HashMap<>();
+
         try {
             getChannel(chName).registerBlockListener(new BlockListener() {
 
                 @Override
-                public void received(BlockEvent blockEvent) {
+                synchronized public void received(BlockEvent blockEvent) {
                     try {
+                        if (!handledBlockEvents.containsKey(blockEvent.getBlockNumber())) {
+                            handledBlockEvents.put(blockEvent.getBlockNumber(), (long)0);
+                        }
+                        handledBlockEvents.put(blockEvent.getBlockNumber(), handledBlockEvents.get(blockEvent.getBlockNumber()) + 1);
+                        logger.debug("Handling event for block {} channel {} {} time", blockEvent.getBlockNumber(), blockEvent.getChannelId(), handledBlockEvents.get(blockEvent.getBlockNumber()));
+
                         listenersRegistry.invokeBlockEventListeners(chName, blockEvent);
-                        logger.debug("Got block event for block {}", blockEvent.getBlockNumber());
                     } catch (Exception e) {
                         logger.warn("Exception during event passing to listener", e);
                         throw new EventException("Exception during event passing to listener", e);

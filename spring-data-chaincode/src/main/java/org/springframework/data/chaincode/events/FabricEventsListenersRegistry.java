@@ -34,6 +34,10 @@ public class FabricEventsListenersRegistry {
 
 	List<ChaincodeEventListenerEntry> chaincodeEventListeners = new ArrayList<>();
 	List<BlockEventListenerEntry> blockEventListeners = new ArrayList<>();
+
+	public FabricEventsListenersRegistry() {
+		logger.debug("Creating FabricEventsListenersRegistry instance");
+	}
 	
 	void registerChaincodeEventListener(String chName, String ccName, String beanName, String methodName) {
 		ChaincodeEventListenerEntry entry = new ChaincodeEventListenerEntry(chName, ccName, beanName, methodName);
