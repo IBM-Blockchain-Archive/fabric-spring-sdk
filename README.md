@@ -1,5 +1,7 @@
 # Spring Data for Hyperledger Fabric
 
+[![Coverage Status](https://coveralls.io/repos/github/gennadylaventman/spring-data-chaincode/badge.svg?branch=master)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode?branch=master)
+
 The primary goal of the [Spring Data](http://projects.spring.io/spring-data) project is to make it easier to build Spring-powered applications that use new data access technologies such as non-relational databases, map-reduce frameworks, and cloud based data services.
 
 The Spring Data for Hyperledger Fabric project aims to provide a familiar and consistent Spring-based programming model to access functionality of Hyperledger Fabric while retaining chaincode (smart contracts) features and capabilities. Key functional areas of Spring Data for Hyperledger Fabric is chaincode invocation abstraction, Hyperledger Fabric connectivity simplification and easily writing a repository style chaincode access layer.
