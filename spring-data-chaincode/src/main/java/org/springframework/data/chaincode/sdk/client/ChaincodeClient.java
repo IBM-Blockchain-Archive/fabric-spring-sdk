@@ -22,8 +22,8 @@ import org.springframework.data.chaincode.repository.Chaincode;
 import com.google.protobuf.ByteString;
 
 /**
- * Interface that expose basic chaincode operations to package 
- * 
+ * Interface that expose basic chaincode operations to package
+ *
  * @author Gennady Laventman
  */
 public interface ChaincodeClient {

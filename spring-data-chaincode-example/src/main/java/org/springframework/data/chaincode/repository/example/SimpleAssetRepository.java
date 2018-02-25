@@ -25,7 +25,7 @@ import org.springframework.data.chaincode.repository.ChaincodeRepository;
 public interface SimpleAssetRepository extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String set(String key, String value);
-	
+
 	@ChaincodeQuery
 	String get(String key);
 

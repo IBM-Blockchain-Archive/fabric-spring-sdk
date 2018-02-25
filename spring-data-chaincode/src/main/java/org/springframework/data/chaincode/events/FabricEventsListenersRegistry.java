@@ -38,14 +38,14 @@ public class FabricEventsListenersRegistry {
 	public FabricEventsListenersRegistry() {
 		logger.debug("Creating FabricEventsListenersRegistry instance");
 	}
-	
+
 	void registerChaincodeEventListener(String chName, String ccName, String beanName, String methodName) {
 		ChaincodeEventListenerEntry entry = new ChaincodeEventListenerEntry(chName, ccName, beanName, methodName);
 		if (!isChaincodeEventListenerExist(entry)) {
 			chaincodeEventListeners.add(entry);
 		} else {
-			logger.warn("Listener for channel {} chaincode {} bean {} method {} already exist", chName, ccName, beanName, methodName);			
-		}			
+			logger.warn("Listener for channel {} chaincode {} bean {} method {} already exist", chName, ccName, beanName, methodName);
+		}
 	}
 
 	void registerBlockEventListener(String chName, String beanName, String methodName) {
@@ -54,13 +54,13 @@ public class FabricEventsListenersRegistry {
 			blockEventListeners.add(entry);
 		} else {
 			logger.warn("Listener for channel {} bean {} method {} already exist", chName, beanName, methodName);
-		}			
+		}
 	}
-	
+
 	public void invokeChaincodeEventListener(String chName, String ccName, ChaincodeEvent event) throws Exception {
 		logger.debug("Invoking chaincode event listeners for channel {}, chaincode {} listeners number {}", chName, ccName, blockEventListeners.size());
 		for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
-			if (listenerEntry.chName.equals(chName) && 
+			if (listenerEntry.chName.equals(chName) &&
 					listenerEntry.ccName.equals(ccName) ) {
 				logger.debug("Listener entry for channel {} chaincode {} invoked using bean {} method {}", chName, ccName, listenerEntry.beanName, listenerEntry.methodName);
 				listenerEntry.method.invoke(listenerEntry.bean, new Object[] {event});
@@ -77,12 +77,12 @@ public class FabricEventsListenersRegistry {
 			}
 		}
 	}
-	
+
 	private boolean isChaincodeEventListenerExist(ChaincodeEventListenerEntry entry) {
 		for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
-			if (listenerEntry.chName.equals(entry.chName) && 
-					listenerEntry.ccName.equals(entry.ccName) && 
-					listenerEntry.beanName.equals(entry.beanName) && 
+			if (listenerEntry.chName.equals(entry.chName) &&
+					listenerEntry.ccName.equals(entry.ccName) &&
+					listenerEntry.beanName.equals(entry.beanName) &&
 					listenerEntry.methodName.equals(entry.methodName)) {
 				return true;
 			}
@@ -92,8 +92,8 @@ public class FabricEventsListenersRegistry {
 
 	private boolean isBlockEventListenerExist(BlockEventListenerEntry entry) {
 		for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
-			if (listenerEntry.chName.equals(entry.chName) && 
-					listenerEntry.beanName.equals(entry.beanName) && 
+			if (listenerEntry.chName.equals(entry.chName) &&
+					listenerEntry.beanName.equals(entry.beanName) &&
 					listenerEntry.methodName.equals(entry.methodName)) {
 				return true;
 			}
@@ -103,15 +103,15 @@ public class FabricEventsListenersRegistry {
 
 	public static class ChaincodeEventListenerEntry {
 		String chName;
-		String ccName; 
-		String beanName; 
+		String ccName;
+		String beanName;
 		String methodName;
-		
+
 		Method method;
 		Object bean;
 
 		boolean registrated;
-		
+
 		public ChaincodeEventListenerEntry(String chName, String ccName, String beanName, String methodName) {
 			this.chName = chName;
 			this.ccName = ccName;
@@ -120,12 +120,12 @@ public class FabricEventsListenersRegistry {
 			this.registrated = false;
 		}
 	}
-	
+
 	public static class BlockEventListenerEntry {
 		String chName;
-		String beanName; 
+		String beanName;
 		String methodName;
-		
+
 		Method method;
 		Object bean;
 

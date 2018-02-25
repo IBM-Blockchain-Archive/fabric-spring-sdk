@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation contains chaincode info, used to mark interface as chaincode interface 
- * 
+ * Annotation contains chaincode info, used to mark interface as chaincode interface
+ *
  * @author Gennady Laventman
  *
  */
@@ -33,10 +33,10 @@ import java.lang.annotation.Target;
 @Target({ TYPE, METHOD })
 public @interface Chaincode {
 	/**
-	 * Chaincode version 
+	 * Chaincode version
 	 */
 	String version();
-	
+
 	/**
 	 * Channel chaincode instantiated on
 	 */

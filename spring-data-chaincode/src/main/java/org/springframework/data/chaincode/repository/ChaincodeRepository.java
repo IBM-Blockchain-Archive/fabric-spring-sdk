@@ -21,7 +21,7 @@ import org.springframework.data.repository.Repository;;
 
 /**
  * Basic interface used as base for all chaincodes, contains implementation of all common chaincode functionality
- * 
+ *
  * @author Gennady Laventman
  *
  */

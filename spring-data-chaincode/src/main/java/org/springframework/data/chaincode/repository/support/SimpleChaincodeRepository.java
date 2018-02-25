@@ -21,12 +21,12 @@ import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 
 /**
  * {@link ChaincodeRepository} basic methods implementation
- * 
+ *
  * @author Gennady Laventman
  *
  */
 public class SimpleChaincodeRepository implements ChaincodeRepository {
-	
+
 	private String channel;
 	private String chaincode;
 	private String version;
@@ -37,7 +37,7 @@ public class SimpleChaincodeRepository implements ChaincodeRepository {
 		this.chaincode = chaincode;
 		this.version = version;
 		this.chaincodeClient = ccClient;
-		
+
 	}
 
 	@Override

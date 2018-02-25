@@ -23,7 +23,7 @@ import org.springframework.data.chaincode.repository.ChaincodeRepository;
 public interface TestRepo3 extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String invokeMethod(String arg1);
-	
+
 	@ChaincodeQuery
 	String qMethod(String arg);
 }

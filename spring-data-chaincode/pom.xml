@@ -16,7 +16,7 @@
 		<validation>1.1.0.Final</validation>
 		<java-module-name>spring.data.chaincode</java-module-name>
 	</properties>
-	
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -44,7 +44,7 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${spring-framework.version}</version>
 		</dependency>
-		
+
 		<!-- Spring data -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -78,7 +78,7 @@
 	      <artifactId>fabric-sdk-java</artifactId>
 	      <version>${fabric-sdk.version}</version>
 	    </dependency>
-		
+
 		<!-- Test Artifacts -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -105,7 +105,7 @@
 			<scope>test</scope>
 		</dependency>
 
-	</dependencies>	
+	</dependencies>
   <build>
     <plugins>
       <plugin>

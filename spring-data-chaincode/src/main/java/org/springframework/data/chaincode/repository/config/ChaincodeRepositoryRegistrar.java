@@ -28,13 +28,13 @@ import org.springframework.data.repository.config.RepositoryConfigurationExtensi
 
 /**
  * {@link ImportBeanDefinitionRegistrar} to setup Chaincode repositories via {@link EnableChaincodeRepositories}.
- * 
+ *
  * @author Gennady Laventman
  *
  */
 public class ChaincodeRepositoryRegistrar extends RepositoryBeanDefinitionRegistrarSupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryRegistrar.class);
-	
+
 	@Override
 	protected Class<? extends Annotation> getAnnotation() {
 		return EnableChaincodeRepositories.class;
@@ -44,7 +44,7 @@ public class ChaincodeRepositoryRegistrar extends RepositoryBeanDefinitionRegist
 	protected RepositoryConfigurationExtension getExtension() {
 		return new ChaincodeRepositoryConfigurationExtension();
 	}
-	
+
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
 		logger.debug("Starting beans registration");

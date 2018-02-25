@@ -39,29 +39,29 @@ import org.springframework.util.StringUtils;
 
 /**
  * {@link RepositoryConfigurationExtension} for Hyperlder Fabric Chaincode
- * 
+ *
  * @author Gennady Laventman
  *
  */
 public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigurationExtensionSupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryConfigurationExtension.class);
-	
+
 	@Override
 	protected String getModulePrefix() {
 		return "chaincode";
 	}
-	
+
 	@Override
 	public String getModuleName() {
 		return "Chaincode";
 	}
-	
+
 	@Override
 	public String getRepositoryFactoryBeanClassName() {
 		logger.debug("getRepositoryFactoryBeanClassName return " + ChaincodeRepositoryFactoryBean.class.getName());
 		return ChaincodeRepositoryFactoryBean.class.getName();
 	}
-	
+
 	@Override
 	public <T extends RepositoryConfigurationSource> Collection<RepositoryConfiguration<T>> getRepositoryConfigurations(
 			T configSource, ResourceLoader loader, boolean strictMatchesOnly) {
@@ -70,19 +70,19 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 		return super.getRepositoryConfigurations(configSource, loader, true);
 	}
 
-	
+
 	@Override
 	protected Collection<Class<? extends Annotation>> getIdentifyingAnnotations() {
 		logger.debug("getIdentifyingAnnotations return {" + Chaincode.class.getName() + "}");
 		return Collections.singleton(Chaincode.class);
 	}
-	
+
 	@Override
 	protected Collection<Class<?>> getIdentifyingTypes() {
 		logger.debug("getIdentifyingTypes return {" + ChaincodeRepository.class.getName() + "}");
 		return Collections.singleton(ChaincodeRepository.class);
 	}
-	
+
 	@Override
 	protected boolean isStrictRepositoryCandidate(RepositoryMetadata metadata) {
 		Class<?> repositoryInterface = metadata.getRepositoryInterface();
@@ -92,7 +92,7 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 			logger.debug("Checking candidate {}, don't have Chaincode annotation", repositoryInterface.getName());
 			return false;
 		}
-		
+
 		if (annotation.channel().isEmpty()) {
 			Channel channel =  AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
 			if (channel == null) {
@@ -101,10 +101,10 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 			}
 		}
 
-		
+
 		return super.isStrictRepositoryCandidate(metadata);
 	}
-		
+
 	@Override
 	public void postProcess(BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
 		logger.debug("postProcess for AnnotationRepositoryConfigurationSource");
@@ -115,5 +115,5 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 		}
 
 	}
-	
+
 }

@@ -30,7 +30,7 @@ Add the Maven dependency:
 
 Spring Data for Hyperledger Fabric provides Spring Repository like interface Hyperledger Fabric chaincode (smart contract). Fabric Chaincode initializes and manages the ledger state through transactions submitted by applications. For chaincode API explanation see [Chaincode Tutorials](http://hyperledger-fabric.readthedocs.io/en/release/chaincode.html) Chaincode expose to developer set of methods, part of them, like `instantiate` or `upgrade`, invoked in response to chaincode startup transactions and rest of the methods are chaincode application functions invoked as response to `invoke` transaction. In addition, part of Chaincode application functions can be invoked without resulting transaction (`query`) - they used to query state of the ledger.
 
-From client application developer perspective, chaincode is remote piece of code, expose set of methods that can be invoked and those invocation change state of the ledger. To simplify the creation of data repositories Spring Data for Hyperledger Fabric provides a repository like programming model. It will automatically create a repository proxy for you that adds implementations of chaincode methods you specify on an interface.  
+From client application developer perspective, chaincode is remote piece of code, expose set of methods that can be invoked and those invocation change state of the ledger. To simplify the creation of data repositories Spring Data for Hyperledger Fabric provides a repository like programming model. It will automatically create a repository proxy for you that adds implementations of chaincode methods you specify on an interface.
 
 For example, given a [Simple Asset](http://hyperledger-fabric.readthedocs.io/en/release/chaincode4ade.html#simple-asset-chaincode) chaincode, a `SimpleAssetRepository` interface that can invoke `get` and `put` methods is shown below:
 
@@ -39,16 +39,16 @@ For example, given a [Simple Asset](http://hyperledger-fabric.readthedocs.io/en/
 public interface SimpleAssetRepository extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String set(String key, String value);
-	
+
 	@ChaincodeQuery
 	String get(String key);
 
 }
 ```
 
-Each method execution will cause execution of corresponding chaincode method.   
- `set()` method will cause to chaincode invoke: `peer chaincode invoke -n sacc -c '{"Args":["set", "a", "20"]}' -C mychannel`.   
- `get()` method will cause to chaincode query: `peer chaincode query -n sacc -c '{"Args":["query","a"]}' -C mychannel`.  
+Each method execution will cause execution of corresponding chaincode method.
+ `set()` method will cause to chaincode invoke: `peer chaincode invoke -n sacc -c '{"Args":["set", "a", "20"]}' -C mychannel`.
+ `get()` method will cause to chaincode query: `peer chaincode query -n sacc -c '{"Args":["query","a"]}' -C mychannel`.
 
 You can have Spring automatically create a proxy for the interface by using the following JavaConfig:
 
@@ -75,7 +75,7 @@ public class SimpleAssetConfig extends AbstractChaincodeConfiguration {
 }
 ```
 
-This sets up a connection to a local Hyperledger Fabric instance and enables the detection of chaincode interfaces (repositories) (through `@EnableChaincodeRepositories`). 
+This sets up a connection to a local Hyperledger Fabric instance and enables the detection of chaincode interfaces (repositories) (through `@EnableChaincodeRepositories`).
 
 This will find the repository interface and register a proxy object in the container. You can use it as shown below:
 
@@ -91,7 +91,7 @@ public class MyService {
   }
 
   public void doWork() {
-  
+
   	 repository.set("a", "Hello, world");
   	 System.out.println(repository.get("a"));
  }

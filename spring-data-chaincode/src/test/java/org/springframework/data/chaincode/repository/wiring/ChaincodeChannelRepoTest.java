@@ -40,14 +40,14 @@ public class ChaincodeChannelRepoTest {
 	public static void tearDownAfterClass() throws Exception {
 		context.close();
 	}
-	
+
 	@Autowired
 	private TestRepo51 testRepo;
-	
+
 	@Test
 	public void testChannelAssociatedRepo() {
 		Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo.invokeMethod("testRepo51")});
 		Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo.queryMethod("testRepo51")});
-		
+
 	}
 }

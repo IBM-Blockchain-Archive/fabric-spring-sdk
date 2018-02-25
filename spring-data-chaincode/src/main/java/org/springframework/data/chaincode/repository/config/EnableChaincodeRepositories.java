@@ -31,7 +31,7 @@ import org.springframework.data.repository.config.DefaultRepositoryBaseClass;
 
 /**
  * Annotation to enable Hyperleder Fabric Chaincode repositories.
- * 
+ *
  * @author Gennady Laventman
  *
  */
@@ -76,10 +76,10 @@ public @interface EnableChaincodeRepositories {
 	 * {@code UserRepositoryImpl}.
 	 */
 	String repositoryImplementationPostfix() default "Impl";
-	
+
 	/**
 	 * Configures the location of where to find the Spring Data named queries properties file. For consistency with spring data commons
-	 * 
+	 *
 	 * @return
 	 */
 	String namedQueriesLocation() default "";
@@ -96,9 +96,9 @@ public @interface EnableChaincodeRepositories {
 	 * @since 1.3
 	 */
 	Class<?> repositoryBaseClass() default DefaultRepositoryBaseClass.class;
-	
+
 	/**
-	 * Configures the name of the {@link ChaincodeClient} bean to be used with the repositories detected. 
+	 * Configures the name of the {@link ChaincodeClient} bean to be used with the repositories detected.
 	 */
 	String chaincodeClientRef() default "chaincodeClient";
 

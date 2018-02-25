@@ -30,7 +30,7 @@ import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 
 /**
  * Base class for Spring Data Chaincode configuration using JavaConfig.
- * 
+ *
  * @author Gennady Laventman
  *
  */
@@ -38,8 +38,8 @@ import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 @Import({FabricClientConfig.class, FabricEventsConfig.class})
 public abstract class AbstractChaincodeConfiguration {
 	/**
-	 * 
-	 * @return location of orderers accessible to client 
+	 *
+	 * @return location of orderers accessible to client
 	 */
 	@Bean (name = "ordererLocations")
 	public Map<String, String> ordererLocations() {
@@ -47,27 +47,27 @@ public abstract class AbstractChaincodeConfiguration {
 		res.put("orderer0", "grpc://localhost:7050");
 		return res;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return location of peers accessible to client
 	 */
 	@Bean (name = "peerLocations")
 	public Map<String, String> peerLocations() {
 		final Map<String, String> res = new HashMap<>();
 		res.put("peer0", "grpc://localhost:7051");
-		return res;		
+		return res;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return of event hubs, usually runs as part of peers, accessible to client
 	 */
 	@Bean (name = "eventHubLocations")
 	public Map<String, String> eventHubLocations() {
 		final Map<String, String> res = new HashMap<>();
 		res.put("peer0", "grpc://localhost:7053");
-		return res;		
+		return res;
 	}
 
 

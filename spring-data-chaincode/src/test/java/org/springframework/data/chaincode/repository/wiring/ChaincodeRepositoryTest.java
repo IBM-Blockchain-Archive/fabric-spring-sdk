@@ -32,10 +32,10 @@ public class ChaincodeRepositoryTest {
 	@Autowired
 	@Qualifier("testRepo1")
 	private TestRepo1 testRepo1;
-	
+
 	@Autowired
 	private TestRepo31 testRepo31;
-	
+
 	private static AnnotationConfigApplicationContext context;
 
 	@BeforeClass
@@ -55,12 +55,12 @@ public class ChaincodeRepositoryTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 
 	@Test
-	public void testCorrectRepo() {        
+	public void testCorrectRepo() {
         Assert.assertNotNull(testRepo1);
-        
+
         Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo1.invokeMethod("asdf")});
         Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo1.qMethod("wert")});
 	}
@@ -74,7 +74,7 @@ public class ChaincodeRepositoryTest {
 		}
         	Assert.fail("TestRepo2 repository should not instantiated");
  	}
-	
+
 	@Test
 	public void testRepoWithInheritance() {
         Assert.assertNotNull(testRepo31);
@@ -82,5 +82,5 @@ public class ChaincodeRepositoryTest {
 		Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo31.invokeMethod("asdf")});
 		Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo31.qMethod("wert")});
 	}
-	
+
 }

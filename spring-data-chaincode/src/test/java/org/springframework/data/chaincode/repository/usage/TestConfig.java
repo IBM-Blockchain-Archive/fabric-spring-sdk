@@ -32,12 +32,12 @@ import java.nio.charset.Charset;
 @ComponentScan
 @EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.usage"})
 public class TestConfig extends AbstractChaincodeConfiguration{
-	@Bean (name = "privateKeyLocation") 
+	@Bean (name = "privateKeyLocation")
 	public String privateKeyLocation() {
 		return "network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
 				+ "/keystore/c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83_sk";
 	}
-	
+
 	@Bean (name = "userSigningCert")
 	public String userSigningCert() {
 		final String certificateFile = "network/crypto-config/peerOrganizations/org1.example.com/users"
@@ -49,12 +49,12 @@ public class TestConfig extends AbstractChaincodeConfiguration{
 		}
 		return null;
 	}
-	
+
 	@Bean (name = "mspId")
 	public String mspId() {
 		return "Org1MSP";
 	}
-	
+
 	@Bean (name = "caCert")
 	public String caCert() {
 		final String certificateFile = "network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";

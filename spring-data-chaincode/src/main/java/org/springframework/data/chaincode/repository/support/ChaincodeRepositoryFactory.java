@@ -43,7 +43,7 @@ import java.util.Optional;
 
 /**
  * Factory to create {@link ChaincodeRepository} instances
- * 
+ *
  * @author Gennady Laventman
  *
  */
@@ -51,14 +51,14 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactory.class);
 
 	private ClassLoader classLoader;
-	
+
 	private SimpleChaincodeRepository targetRepository;
 
 	private ChaincodeClient chaincodeClient;
 
 	/**
 	 * Create new {@link ChaincodeRepositoryFactory} for given repository interface with given {@link ChaincodeClient}
-	 * 
+	 *
 	 * @param repositoryInterface - must not be {@literal null}
 	 * @param chaincodeClient - must not be {@literal null}
 	 */
@@ -90,25 +90,25 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 	public <T, ID> EntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {
 		return null;
 	}
-	
+
 	@Override
 	public <T> T getRepository(Class<T> repositoryInterface, RepositoryFragments fragments) {
 		logger.debug("Creating proxy for {}, fragments {}", repositoryInterface.getSimpleName(), fragments);
 
 		return super.getRepository(repositoryInterface, fragments);
 	}
-	
+
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
 		logger.debug("Setting bean class loader");
 		this.classLoader = classLoader;
 		super.setBeanClassLoader(classLoader);
 	}
-	
+
 	private class ChaincodeMethodLookupStrategy implements QueryLookupStrategy {
-		
+
 		private ChaincodeClient chaincodeClient;
-		
+
 		public ChaincodeMethodLookupStrategy(ChaincodeClient chaincodeClient) {
 			this.chaincodeClient = chaincodeClient;
 		}

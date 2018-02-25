@@ -30,7 +30,6 @@ import java.util.List;
 @Configuration
 @ComponentScan
 @Import({FabricEventsConfig.class})
-
 @EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.wiring"})
 public class TestConfig {
 
@@ -67,7 +66,6 @@ public class TestConfig {
 
 	@Bean
 	public ChaincodeClient chaincodeClient() {
-
 		return new TestChaincodeClient();
 	}
 

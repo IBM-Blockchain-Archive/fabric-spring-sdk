@@ -29,6 +29,7 @@ import java.io.File;
 
 @ContextConfiguration(classes = { TestConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
 public class ChaincodeUsageTest {
 	@ClassRule
 	public static DockerComposeContainer env = new DockerComposeContainer(
@@ -48,7 +49,7 @@ public class ChaincodeUsageTest {
 
 	@Test
 	public void testExample02() throws Exception {
-		
+
 		Assert.assertNotNull(example02);
 
 		String aString1 = example02.query("a");

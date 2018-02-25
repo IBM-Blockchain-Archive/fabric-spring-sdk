@@ -11,5 +11,5 @@
 
     <logger name="org.springframework.data.chaincode" level="DEBUG"/>
     <logger name="org.hyperledger.fabric.sdk.client" level="DEBUG"/>
-    
+
 </configuration>

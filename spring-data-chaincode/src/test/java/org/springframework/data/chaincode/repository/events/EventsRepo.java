@@ -25,7 +25,7 @@ import org.springframework.data.chaincode.repository.ChaincodeRepository;
 public interface EventsRepo extends ChaincodeRepository {
 	@ChaincodeInvoke
 	String invoke();
-	
+
 	@ChaincodeQuery
 	String query();
 

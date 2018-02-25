@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation to mark chaincode interface method as invoke chaincode call.
  * Chaincode invoke results in transaction written in ledger
- * 
+ *
  * @author Gennady Laventman
  *
  */

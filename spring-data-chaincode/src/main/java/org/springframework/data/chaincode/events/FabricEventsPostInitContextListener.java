@@ -33,88 +33,86 @@ import java.util.Map;
 import java.util.Set;
 
 public class FabricEventsPostInitContextListener implements ApplicationListener<ContextRefreshedEvent> {
-	private static final Logger logger = LoggerFactory.getLogger(FabricEventsPostInitContextListener.class);
-	
-	@Autowired
-	private FabricEventsListenersRegistry registry;
-	
-	@Autowired
-	private ChaincodeClient chaincodeClient;
+    private static final Logger logger = LoggerFactory.getLogger(FabricEventsPostInitContextListener.class);
 
-	@Override
-	synchronized public void onApplicationEvent(ContextRefreshedEvent event) {
-		logger.debug("Handling events listener registry on event {}, block listeners {}, chaincode listeners {}", event, registry.blockEventListeners.size(), registry.chaincodeEventListeners.size());
-		Set<String> channelsToRegister = new HashSet<>();
-		Map<String, Set<String>> chaincodesToRegister = new HashMap<>();
-		
-		ApplicationContext context = event.getApplicationContext();
-		for (FabricEventsListenersRegistry.BlockEventListenerEntry entry : registry.blockEventListeners) {
-			logger.debug("Looking for bean {} method {} to listen to block events in channel {}", entry.beanName, entry.methodName, entry.chName);
-			if (entry.registrated) {
-				logger.debug("Bean {} method {} to listen to block events in channel {} already registrated", entry.beanName, entry.methodName, entry.chName);
-				continue;
-			}
-			Object bean = context.getBean(entry.beanName);
-			if (bean != null) {
-				Method method;
-				try {
-					method = bean.getClass().getMethod(entry.methodName, BlockEvent.class);
-				} catch (NoSuchMethodException | SecurityException e) {
-					logger.warn("Can't find method {} in bean {} class {}", entry.methodName, entry.beanName, bean.getClass().getName());
-					continue;
-				}
-				entry.bean = bean;
-				entry.method = method;
-			} else {
-				logger.warn("Can't find bean {}", entry.beanName);
-				continue;
-			}
-			entry.registrated = true;
-			channelsToRegister.add(entry.chName);
-		}
+    @Autowired
+    private FabricEventsListenersRegistry registry;
 
-		for (FabricEventsListenersRegistry.ChaincodeEventListenerEntry entry : registry.chaincodeEventListeners) {
-			logger.debug("Looking for bean {} method {} to listen to chaincode events in channel {} chaincode {}", entry.beanName, entry.methodName, entry.chName, entry.ccName);
-			if (entry.registrated) {
-				logger.debug("Bean {} method {} to listen to chaincode events in channel {} chaincode {} already registrated", entry.beanName, entry.methodName, entry.chName, entry.ccName);
-				continue;
-			}
-			Object bean = context.getBean(entry.beanName);
-			if (bean != null) {
-				Method method;
-				try {
-					method = bean.getClass().getMethod(entry.methodName, ChaincodeEvent.class);
-				} catch (NoSuchMethodException | SecurityException e) {
-					logger.warn("Can't find method {} in bean {} class {}", entry.methodName, entry.beanName, bean.getClass().getName());
-					continue;
-				}
-				entry.bean = bean;
-				entry.method = method;
-			} else {
-				logger.warn("Can't find bean {}", entry.beanName);
-				continue;
-			}
-			if (!chaincodesToRegister.containsKey(entry.chName)) {
-				chaincodesToRegister.put(entry.chName, new HashSet<>());
-			}
-			entry.registrated = true;
-			chaincodesToRegister.get(entry.chName).add(entry.ccName);
-		}
-		
-		channelsToRegister.forEach(channel -> {
-			logger.debug("Staring block event listener for channel {}", channel);
-			chaincodeClient.startBlockEventsListener(channel);
-		});
-		
-		chaincodesToRegister.forEach((channel, chaincodes) -> {
-			chaincodes.forEach(cc -> {
-				logger.debug("Staring chaincode event listener for channel {} chaincode {}", channel, cc);
-				chaincodeClient.startChaincodeEventsListener(channel, cc);
-			});
-		});
-		
-	}
-	
-	
+    @Autowired
+    private ChaincodeClient chaincodeClient;
 
-}
+    @Override
+    synchronized public void onApplicationEvent(ContextRefreshedEvent event) {
+        logger.debug("Handling events listener registry on event {}, block listeners {}, chaincode listeners {}", event, registry.blockEventListeners.size(), registry.chaincodeEventListeners.size());
+        Set<String> channelsToRegister = new HashSet<>();
+        Map<String, Set<String>> chaincodesToRegister = new HashMap<>();
+
+        ApplicationContext context = event.getApplicationContext();
+        for (FabricEventsListenersRegistry.BlockEventListenerEntry entry : registry.blockEventListeners) {
+            logger.debug("Looking for bean {} method {} to listen to block events in channel {}", entry.beanName, entry.methodName, entry.chName);
+            if (entry.registrated) {
+                logger.debug("Bean {} method {} to listen to block events in channel {} already registrated", entry.beanName, entry.methodName, entry.chName);
+                continue;
+            }
+            Object bean = context.getBean(entry.beanName);
+            if (bean != null) {
+                Method method;
+                try {
+                    method = bean.getClass().getMethod(entry.methodName, BlockEvent.class);
+                } catch (NoSuchMethodException | SecurityException e) {
+                    logger.warn("Can't find method {} in bean {} class {}", entry.methodName, entry.beanName, bean.getClass().getName());
+                    continue;
+                }
+                entry.bean = bean;
+                entry.method = method;
+            } else {
+                logger.warn("Can't find bean {}", entry.beanName);
+                continue;
+            }
+            entry.registrated = true;
+            channelsToRegister.add(entry.chName);
+        }
+
+        for (FabricEventsListenersRegistry.ChaincodeEventListenerEntry entry : registry.chaincodeEventListeners) {
+            logger.debug("Looking for bean {} method {} to listen to chaincode events in channel {} chaincode {}", entry.beanName, entry.methodName, entry.chName, entry.ccName);
+            if (entry.registrated) {
+                logger.debug("Bean {} method {} to listen to chaincode events in channel {} chaincode {} already registrated", entry.beanName, entry.methodName, entry.chName, entry.ccName);
+                continue;
+            }
+            Object bean = context.getBean(entry.beanName);
+            if (bean != null) {
+                Method method;
+                try {
+                    method = bean.getClass().getMethod(entry.methodName, ChaincodeEvent.class);
+                } catch (NoSuchMethodException | SecurityException e) {
+                    logger.warn("Can't find method {} in bean {} class {}", entry.methodName, entry.beanName, bean.getClass().getName());
+                    continue;
+                }
+                entry.bean = bean;
+                entry.method = method;
+            } else {
+                logger.warn("Can't find bean {}", entry.beanName);
+                continue;
+            }
+            if (!chaincodesToRegister.containsKey(entry.chName)) {
+                chaincodesToRegister.put(entry.chName, new HashSet<>());
+            }
+            entry.registrated = true;
+            chaincodesToRegister.get(entry.chName).add(entry.ccName);
+        }
+
+        channelsToRegister.forEach(channel -> {
+            logger.debug("Staring block event listener for channel {}", channel);
+            chaincodeClient.startBlockEventsListener(channel);
+        });
+
+        chaincodesToRegister.forEach((channel, chaincodes) -> {
+            chaincodes.forEach(cc -> {
+                logger.debug("Staring chaincode event listener for channel {} chaincode {}", channel, cc);
+                chaincodeClient.startChaincodeEventsListener(channel, cc);
+            });
+        });
+
+    }
+
+ }

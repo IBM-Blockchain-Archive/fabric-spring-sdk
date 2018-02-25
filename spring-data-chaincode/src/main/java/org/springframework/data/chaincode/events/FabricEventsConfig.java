@@ -37,7 +37,7 @@ public class FabricEventsConfig {
 		}
 		return fabricEventsAnnotationsBeanPostProcessor;
 	}
-	
+
 	@Bean(name = "fabricEventsPostInitContextListener")
 	public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
 		if (fabricEventsPostInitContextListener == null) {
@@ -45,7 +45,7 @@ public class FabricEventsConfig {
 		}
 		return fabricEventsPostInitContextListener;
 	}
-	
+
 	@Bean(name = "fabricEventsListenersRegistry")
 	public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
 		if (fabricEventsListenersRegistry == null) {

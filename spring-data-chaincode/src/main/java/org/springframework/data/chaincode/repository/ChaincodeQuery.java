@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 /**
  *  Annotation to mark chaincode interface method as query chaincode call
  *  Chaincode query not results in transaction written in ledger and used to check chain state
- * 
+ *
  * @author Gennady Laventman
  *
  */

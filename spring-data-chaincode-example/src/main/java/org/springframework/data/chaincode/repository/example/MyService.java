@@ -30,7 +30,7 @@ public class MyService {
   }
 
   public void doWork() {
-  
+
   	 repository.set("a", "Hello, world");
   	 System.out.println(repository.get("a"));
  }

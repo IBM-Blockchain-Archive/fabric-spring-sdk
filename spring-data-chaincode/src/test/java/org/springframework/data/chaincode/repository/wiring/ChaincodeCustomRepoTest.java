@@ -43,9 +43,9 @@ public class ChaincodeCustomRepoTest {
 
 	@Autowired
 	private TestRepo4 testRepo;
-	
+
 	@Test
-	public void testCustomImpl() {		
+	public void testCustomImpl() {
         Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo.invokeMethod("asdf")});
         Assert.assertArrayEquals("Wrong result for custom method call", new String[] {"customMethod"}, new String[] {testRepo.customMethod()});
 	}
