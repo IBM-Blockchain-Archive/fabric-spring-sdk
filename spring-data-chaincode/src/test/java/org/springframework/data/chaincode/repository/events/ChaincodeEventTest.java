@@ -27,8 +27,8 @@ import org.testcontainers.containers.DockerComposeContainer;
 
 import java.io.File;
 
-//@ContextConfiguration(classes = { TestConfig.class })
-//@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { TestConfig.class })
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeEventTest {
 
 	@ClassRule
@@ -51,7 +51,7 @@ public class ChaincodeEventTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	//@Test
+	@Test
 	public void testEvents() throws Exception {
 		listener.blockEvents = 0;
 		listener.ccEvents = 0;
@@ -66,7 +66,7 @@ public class ChaincodeEventTest {
 
 		Assert.assertEquals("", prevEvents + 2, newEvents);
 
-//		Assert.assertEquals("", 2, listener.blockEvents);
+		Assert.assertEquals("", 2, listener.blockEvents);
 		Assert.assertEquals("", 2, listener.ccEvents);
 
 	}

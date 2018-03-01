@@ -30,6 +30,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @ComponentScan(excludeFilters = {
@@ -77,4 +79,10 @@ public class TestConfig extends AbstractChaincodeConfiguration{
 		}
 		return null;
 	}
+
+	@Bean (name = "eventHubLocations")
+	public Map<String, String> eventHubLocations() {
+		return new HashMap<>();
+	}
+
 }

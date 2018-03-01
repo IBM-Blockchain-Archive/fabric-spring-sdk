@@ -29,7 +29,6 @@ import java.io.File;
 
 @ContextConfiguration(classes = { TestConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
-@Ignore
 public class ChaincodeUsageTest {
 	@ClassRule
 	public static DockerComposeContainer env = new DockerComposeContainer(
