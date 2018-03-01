@@ -64,10 +64,10 @@ public class ChaincodeEventTest {
 
 		int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		Assert.assertEquals("", prevEvents + 2, newEvents);
+		Assert.assertEquals("Events amount not increased correctly", prevEvents + 2, newEvents);
 
-		Assert.assertEquals("", 2, listener.blockEvents);
-		Assert.assertEquals("", 2, listener.ccEvents);
+		Assert.assertEquals("Block events number incorrect", 2, listener.blockEvents);
+		Assert.assertEquals("Chaincode events number incorrect", 2, listener.ccEvents);
 
 	}
 
