@@ -26,13 +26,7 @@ import java.nio.charset.Charset;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.Certificate;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -77,14 +71,29 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     @Autowired
     private FabricEventsListenersRegistry listenersRegistry;
 
-    @Resource(name = "ordererLocations")
+    @Autowired(required = false)
+    @Qualifier("ordererLocations")
     private Map<String, String> ordererLocations;
 
-    @Resource(name = "peerLocations")
+    @Autowired(required = false)
+    @Qualifier("peerLocations")
     private Map<String, String> peerLocations;
 
-    @Resource(name = "eventHubLocations")
+    @Autowired(required = false)
+    @Qualifier("eventHubLocations")
     private Map<String, String> eventHubLocations;
+
+    @Autowired(required = false)
+    @Qualifier("ordererProperties")
+    private Map<String, Properties> ordererProperties;
+
+    @Autowired(required = false)
+    @Qualifier("peerProperties")
+    private Map<String, Properties> peerProperties;
+
+    @Autowired(required = false)
+    @Qualifier("eventHubProperties")
+    private Map<String, Properties> eventHubProperties;
 
     @Autowired(required = false)
     @Qualifier("userSigningCert")
@@ -238,14 +247,32 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             logger.debug("Channel {} not initiated, initiating", name);
             Channel channel = client.newChannel(name);
             for (Map.Entry<String, String> peer : peerLocations.entrySet()) {
-                channel.addPeer(client.newPeer(peer.getKey(), peer.getValue()));
+                if (peerProperties != null && peerProperties.containsKey(peer.getKey())) {
+                    logger.debug("Adding peer {} with address {} and properties {}", peer.getKey(), peer.getValue(), peerProperties.get(peer.getKey()));
+                    channel.addPeer(client.newPeer(peer.getKey(), peer.getValue(), peerProperties.get(peer.getKey())));
+                } else {
+                    logger.debug("Adding peer {} with address {}", peer.getKey(), peer.getValue());
+                    channel.addPeer(client.newPeer(peer.getKey(), peer.getValue()));
+                }
             }
 
             for (Map.Entry<String, String> eventHub : eventHubLocations.entrySet()) {
-                channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue()));
+                if (eventHubProperties != null && eventHubProperties.containsKey(eventHub.getKey())) {
+                    logger.debug("Adding eventHub {} with address {} and properties {}", eventHub.getKey(), eventHub.getValue(), eventHubProperties.get(eventHub.getKey()));
+                    channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue(), eventHubProperties.get(eventHub.getKey())));
+                } else {
+                    logger.debug("Adding eventHub {} with address {} ", eventHub.getKey(), eventHub.getValue());
+                    channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue()));
+                }
             }
             for (Map.Entry<String, String> orderer : ordererLocations.entrySet()) {
-                channel.addOrderer(client.newOrderer(orderer.getKey(), orderer.getValue()));
+                if (ordererProperties != null && ordererProperties.containsKey(orderer.getKey())) {
+                    logger.debug("Adding orderer {} with address {} and properties {}", orderer.getKey(), orderer.getValue(), ordererProperties.get(orderer.getKey()));
+                    channel.addOrderer(client.newOrderer(orderer.getKey(), orderer.getValue(), ordererProperties.get(orderer.getKey())));
+                } else {
+                    logger.debug("Adding orderer {} with address {}", orderer.getKey(), orderer.getValue());
+                    channel.addOrderer(client.newOrderer(orderer.getKey(), orderer.getValue()));
+                }
             }
             channel.initialize();
             channels.put(name, channel);
@@ -363,20 +390,28 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             throw new QueryException("Exception during query send proposal", e);
         }
 
+        logger.debug("Get responses {}", responses);
+        QueryException exc = null;
+        String res = null;
         for (ProposalResponse resp : responses) {
             if (resp.getProposalResponse() == null || resp.getProposalResponse().getResponse() == null) {
-                logger.warn("Wrong proposal response", resp);
-                throw new QueryException("Wrong proposal response");
+                logger.warn("Wrong proposal response {} from peer {}", resp, resp.getPeer().getName());
+                exc = new QueryException("Wrong proposal response");
+                continue;
             }
             if (resp.getProposalResponse().getResponse().getStatus() == Status.SUCCESS.getNumber()) {
                 logger.debug("Query response status {} msg {} payload {}", resp.getProposalResponse().getResponse().getStatus(),
                         resp.getProposalResponse().getResponse().getMessage(),
                         resp.getProposalResponse().getResponse().getPayload().toStringUtf8());
-                return resp.getProposalResponse().getResponse().getPayload().toStringUtf8();
+                res = resp.getProposalResponse().getResponse().getPayload().toStringUtf8();
             }
         }
 
-        return null;
+        if (exc != null) {
+            throw  exc;
+        }
+
+        return res;
     }
 
     @Override

@@ -19,7 +19,6 @@ package org.springframework.data.chaincode.repository.usage;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.chaincode.repository.utils.DockerUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,7 +38,7 @@ public class ChaincodeUsageTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		DockerUtils.waitForContainers();
+		DockerUtils.waitForContainers(new String[]{"peer0"});
 	}
 
 	@AfterClass

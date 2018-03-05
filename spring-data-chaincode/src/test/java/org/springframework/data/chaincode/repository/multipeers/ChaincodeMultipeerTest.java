@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.events;
+package org.springframework.data.chaincode.repository.multipeers;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -28,14 +28,18 @@ import java.io.File;
 
 @ContextConfiguration(classes = { TestConfig.class })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ChaincodeEventTest {
+public class ChaincodeMultipeerTest {
 
 	@ClassRule
 	public static DockerComposeContainer env = new DockerComposeContainer(
-			new File("src/test/resources/network/docker-compose.yml")).withLocalCompose(false).withPull(false);
+			new File("src/test/resources/first-network/docker-compose-cli.yaml")).withLocalCompose(false).withPull(false);
 
 	@Autowired
     EventsRepo eventsRepo;
+
+	@Autowired
+	Example02 example02;
+
 
 	@Autowired
     ChaincodeEventsListenerComponent listener;
@@ -43,7 +47,7 @@ public class ChaincodeEventTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		DockerUtils.waitForContainers(new String[]{"peer0"});
+		DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
 	}
 
 	@AfterClass
@@ -63,12 +67,36 @@ public class ChaincodeEventTest {
 
 		int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		Assert.assertEquals("Events amount not increased correctly", prevEvents + 2, newEvents);
+		Assert.assertEquals("", prevEvents + 2, newEvents);
 
-		Assert.assertEquals("Block events number incorrect", 2, listener.blockEvents);
-		Assert.assertEquals("Chaincode events number incorrect", 2, listener.ccEvents);
+		Assert.assertEquals("", 4, listener.blockEvents);
+		Assert.assertEquals("", 4, listener.ccEvents);
 
 	}
+
+	@Test
+	public void testExample02() throws Exception {
+
+		Assert.assertNotNull(example02);
+
+		String aString1 = example02.query("a");
+		String bString1 = example02.query("b");
+
+		int a1 = Integer.decode(aString1);
+		int b1 = Integer.decode(bString1);
+
+		example02.invoke("a", "b", "20");
+		String aString2 = example02.query("a");
+		String bString2 = example02.query("b");
+
+		int a2 = Integer.decode(aString2);
+		int b2 = Integer.decode(bString2);
+
+		Assert.assertEquals("", a1, a2 + 20);
+		Assert.assertEquals("", b2, b1 + 20);
+
+	}
+
 
 
 }
