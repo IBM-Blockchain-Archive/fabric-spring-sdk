@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/gennadylaventman/spring-data-chaincode.svg?branch=master)](https://travis-ci.org/gennadylaventman/spring-data-chaincode)
 
-[![Coverage Status](https://coveralls.io/repos/github/gennadylaventman/spring-data-chaincode/badge.svg)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode)
+[![Coverage Status](https://img.shields.io/coveralls/github/gennadylaventman/spring-data-chaincode/master.svg)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode)
 
 The primary goal of the [Spring Data](http://projects.spring.io/spring-data) project is to make it easier to build Spring-powered applications that use new data access technologies such as non-relational databases, map-reduce frameworks, and cloud based data services.
 
