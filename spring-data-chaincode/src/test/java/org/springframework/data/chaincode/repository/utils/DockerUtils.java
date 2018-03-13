@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DockerUtils {
-    static public void waitForContainers(String[] peers) throws Exception{
+    static public void waitForContainers(String[] peers) throws Exception {
         for (int i = 0; i < 20; i++) {
             List<Container> containers = DockerClientFactory.instance().client().listContainersCmd().exec();
             AtomicInteger exampleContainerExist = new AtomicInteger(0);

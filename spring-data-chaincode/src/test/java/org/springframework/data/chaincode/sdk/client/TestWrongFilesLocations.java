@@ -1,13 +1,9 @@
 package org.springframework.data.chaincode.sdk.client;
 
-import org.hyperledger.fabric.sdk.exception.CryptoException;
-import org.hyperledger.fabric.sdk.security.CryptoPrimitives;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.security.CryptoPrimitive;
 
 public class TestWrongFilesLocations {
     @Test
@@ -57,5 +53,5 @@ public class TestWrongFilesLocations {
             return;
         }
         Assert.fail("No QueryException for not configured client");
-   }
+    }
 }

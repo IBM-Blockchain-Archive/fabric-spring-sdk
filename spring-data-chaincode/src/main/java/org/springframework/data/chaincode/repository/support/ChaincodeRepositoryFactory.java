@@ -42,78 +42,77 @@ import java.util.Optional;
  * Factory to create {@link ChaincodeRepository} instances
  *
  * @author Gennady Laventman
- *
  */
 public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
-	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactory.class);
 
-	private SimpleChaincodeRepository targetRepository;
+    private SimpleChaincodeRepository targetRepository;
 
-	private ChaincodeClient chaincodeClient;
+    private ChaincodeClient chaincodeClient;
 
-	/**
-	 * Create new {@link ChaincodeRepositoryFactory} for given repository interface with given {@link ChaincodeClient}
-	 *
-	 * @param repositoryInterface - must not be {@literal null}
-	 * @param chaincodeClient - must not be {@literal null}
-	 */
-	ChaincodeRepositoryFactory(Class<?> repositoryInterface, ChaincodeClient chaincodeClient) {
-		super();
-		this.chaincodeClient = chaincodeClient;
-		logger.debug("Creating chaincode bean factory");
-		Chaincode annotation = AnnotationUtils.findAnnotation(repositoryInterface, Chaincode.class);
-		String channelName = annotation.channel();
-		Channel channel= AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
-		if (channel != null) {
-			channelName = channel.name();
-		}
-		this.targetRepository = new SimpleChaincodeRepository(channelName, annotation.name(), annotation.version(), chaincodeClient);
-	}
+    /**
+     * Create new {@link ChaincodeRepositoryFactory} for given repository interface with given {@link ChaincodeClient}
+     *
+     * @param repositoryInterface - must not be {@literal null}
+     * @param chaincodeClient     - must not be {@literal null}
+     */
+    ChaincodeRepositoryFactory(Class<?> repositoryInterface, ChaincodeClient chaincodeClient) {
+        super();
+        this.chaincodeClient = chaincodeClient;
+        logger.debug("Creating chaincode bean factory");
+        Chaincode annotation = AnnotationUtils.findAnnotation(repositoryInterface, Chaincode.class);
+        String channelName = annotation.channel();
+        Channel channel = AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
+        if (channel != null) {
+            channelName = channel.name();
+        }
+        this.targetRepository = new SimpleChaincodeRepository(channelName, annotation.name(), annotation.version(), chaincodeClient);
+    }
 
-	@Override
-	protected Object getTargetRepository(RepositoryInformation metadata) {
-			return targetRepository;
-	}
+    @Override
+    protected Object getTargetRepository(RepositoryInformation metadata) {
+        return targetRepository;
+    }
 
-	@Override
-	protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
-		return SimpleChaincodeRepository.class;
-	}
+    @Override
+    protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
+        return SimpleChaincodeRepository.class;
+    }
 
-	@Override
-	public <T, ID> EntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {
-		return null;
-	}
+    @Override
+    public <T, ID> EntityInformation<T, ID> getEntityInformation(Class<T> domainClass) {
+        return null;
+    }
 
-	@Override
-	public <T> T getRepository(Class<T> repositoryInterface, RepositoryFragments fragments) {
-		logger.debug("Creating proxy for {}, fragments {}", repositoryInterface.getSimpleName(), fragments);
+    @Override
+    public <T> T getRepository(Class<T> repositoryInterface, RepositoryFragments fragments) {
+        logger.debug("Creating proxy for {}, fragments {}", repositoryInterface.getSimpleName(), fragments);
 
-		return super.getRepository(repositoryInterface, fragments);
-	}
+        return super.getRepository(repositoryInterface, fragments);
+    }
 
-	private class ChaincodeMethodLookupStrategy implements QueryLookupStrategy {
+    private class ChaincodeMethodLookupStrategy implements QueryLookupStrategy {
 
-		private ChaincodeClient chaincodeClient;
+        private ChaincodeClient chaincodeClient;
 
-		public ChaincodeMethodLookupStrategy(ChaincodeClient chaincodeClient) {
-			this.chaincodeClient = chaincodeClient;
-		}
+        public ChaincodeMethodLookupStrategy(ChaincodeClient chaincodeClient) {
+            this.chaincodeClient = chaincodeClient;
+        }
 
-		@Override
-		public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, ProjectionFactory factory,
-				NamedQueries namedQueries) {
-			logger.debug("Looking query for {}, ProjectionFactory {}, NamedQueries {}", method.getName(), factory, namedQueries);
-			return new ChaincodeRepositoryQuery(chaincodeClient, method, metadata, factory, namedQueries);
-		}
-	}
+        @Override
+        public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, ProjectionFactory factory,
+                                            NamedQueries namedQueries) {
+            logger.debug("Looking query for {}, ProjectionFactory {}, NamedQueries {}", method.getName(), factory, namedQueries);
+            return new ChaincodeRepositoryQuery(chaincodeClient, method, metadata, factory, namedQueries);
+        }
+    }
 
-	@Override
-	protected Optional<QueryLookupStrategy> getQueryLookupStrategy(Key key,
-			EvaluationContextProvider evaluationContextProvider) {
-		logger.debug("getQueryLookupStrategy");
-		return Optional.of(new ChaincodeMethodLookupStrategy(chaincodeClient));
-	}
+    @Override
+    protected Optional<QueryLookupStrategy> getQueryLookupStrategy(Key key,
+                                                                   EvaluationContextProvider evaluationContextProvider) {
+        logger.debug("getQueryLookupStrategy");
+        return Optional.of(new ChaincodeMethodLookupStrategy(chaincodeClient));
+    }
 
 //	@Override
 //	protected ProjectionFactory getProjectionFactory(ClassLoader classLoader, BeanFactory beanFactory) {

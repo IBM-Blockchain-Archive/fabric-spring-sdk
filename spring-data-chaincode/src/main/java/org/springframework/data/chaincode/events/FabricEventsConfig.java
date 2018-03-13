@@ -22,22 +22,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FabricEventsConfig {
 
-	public FabricEventsConfig() {
-	}
+    public FabricEventsConfig() {
+    }
 
-	@Bean(name = "chaincodeEventListenerAnnotationBeanPostProcessor")
-	public FabricEventsAnnotationsBeanPostProcessor chaincodeEventListenerAnnotationBeanPostProcessor() {
-		return new FabricEventsAnnotationsBeanPostProcessor();
-	}
+    @Bean(name = "chaincodeEventListenerAnnotationBeanPostProcessor")
+    public FabricEventsAnnotationsBeanPostProcessor chaincodeEventListenerAnnotationBeanPostProcessor() {
+        return new FabricEventsAnnotationsBeanPostProcessor();
+    }
 
-	@Bean(name = "fabricEventsPostInitContextListener")
-	public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
-		return new FabricEventsPostInitContextListener();
-	}
+    @Bean(name = "fabricEventsPostInitContextListener")
+    public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
+        return new FabricEventsPostInitContextListener();
+    }
 
-	@Bean(name = "fabricEventsListenersRegistry")
-	public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
-		return new FabricEventsListenersRegistry();
-	}
+    @Bean(name = "fabricEventsListenersRegistry")
+    public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
+        return new FabricEventsListenersRegistry();
+    }
 
 }

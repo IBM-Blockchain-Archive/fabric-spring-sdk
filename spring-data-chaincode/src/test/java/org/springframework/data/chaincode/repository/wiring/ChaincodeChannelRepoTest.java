@@ -29,25 +29,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(classes = {TestConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeChannelRepoTest {
-	private static AnnotationConfigApplicationContext context;
+    private static AnnotationConfigApplicationContext context;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		context = new AnnotationConfigApplicationContext(TestConfig.class);
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        context = new AnnotationConfigApplicationContext(TestConfig.class);
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		context.close();
-	}
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        context.close();
+    }
 
-	@Autowired
-	private TestRepo51 testRepo;
+    @Autowired
+    private TestRepo51 testRepo;
 
-	@Test
-	public void testChannelAssociatedRepo() {
-		Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo.invokeMethod("testRepo51")});
-		Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo.queryMethod("testRepo51")});
+    @Test
+    public void testChannelAssociatedRepo() {
+        Assert.assertArrayEquals("Wrong invoke result", new String[]{"invoked"}, new String[]{testRepo.invokeMethod("testRepo51")});
+        Assert.assertArrayEquals("Wrong query result", new String[]{"queried"}, new String[]{testRepo.queryMethod("testRepo51")});
 
-	}
+    }
 }

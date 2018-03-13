@@ -17,13 +17,14 @@
 package org.springframework.data.chaincode.repository;
 
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;;
+import org.springframework.data.repository.Repository;
+
+;
 
 /**
  * Basic interface used as base for all chaincodes, contains implementation of all common chaincode functionality
  *
  * @author Gennady Laventman
- *
  */
 @NoRepositoryBean
 public interface ChaincodeRepository extends Repository<Object, Object> {

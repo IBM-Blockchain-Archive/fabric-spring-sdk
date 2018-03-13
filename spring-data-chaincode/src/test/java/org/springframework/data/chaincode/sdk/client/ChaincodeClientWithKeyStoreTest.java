@@ -27,14 +27,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.DockerComposeContainer;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfigWithKeyStore.class})
 public class ChaincodeClientWithKeyStoreTest {
-	
+
     @ClassRule
     public static DockerComposeContainer env = new DockerComposeContainer(
             new File("src/test/resources/network/docker-compose.yml")
@@ -42,48 +41,48 @@ public class ChaincodeClientWithKeyStoreTest {
             .withLocalCompose(false)
             .withPull(false);
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		DockerUtils.waitForContainers(new String[]{"peer0"});
-	}
+    @BeforeClass
+    public static void setUp() throws Exception {
+        DockerUtils.waitForContainers(new String[]{"peer0"});
+    }
 
-	@Autowired
-	ChaincodeClient chaincodeClient;
+    @Autowired
+    ChaincodeClient chaincodeClient;
 
-	@Test
-	public void testClient() {
-		
-		
-		String prevAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"a"});
-		String prevBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"b"});
-		chaincodeClient.invokeChaincode("mychannel", "mycc", "1.0", "invoke", new String[] {"a", "b", "1"});
+    @Test
+    public void testClient() {
 
-		String newAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"a"});
-		String newBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"b"});
 
-		int prevA = Integer.parseInt(prevAString);
-		int prevB = Integer.parseInt(prevBString);
-		
-		int newA = Integer.parseInt(newAString);
-		int newB = Integer.parseInt(newBString);
-		
-		System.out.println("<<<<<<<<<<<<<<<<<<<<< prevA " + prevAString + " prevB " + prevBString + " newA " + newAString + " newB " + newBString + " >>>>>>>>>>>>>>>>>>>>>");
-		
-		assertEquals("A value didn't changed", prevA - 1, newA);
-		assertEquals("B value didn't changed", prevB + 1, newB);
+        String prevAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"a"});
+        String prevBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"b"});
+        chaincodeClient.invokeChaincode("mychannel", "mycc", "1.0", "invoke", new String[]{"a", "b", "1"});
 
-		chaincodeClient.invokeChaincode("mychannel", "mycc", "1.0", "invoke", new String[] {"b", "a", "1"});
-		
-		newAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"a"});
-		newBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"b"});
-		
-		newA = Integer.parseInt(newAString);
-		newB = Integer.parseInt(newBString);
+        String newAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"a"});
+        String newBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"b"});
 
-		assertEquals("A value changed", prevA, newA);
-		assertEquals("B value changed", prevB, newB);
+        int prevA = Integer.parseInt(prevAString);
+        int prevB = Integer.parseInt(prevBString);
 
-		System.out.println("<<<<<<<<<<<<<<<<<<<<< prevA " + prevAString + " prevB " + prevBString + " newA " + newAString + " newB " + newBString + " >>>>>>>>>>>>>>>>>>>>>");
-	}
+        int newA = Integer.parseInt(newAString);
+        int newB = Integer.parseInt(newBString);
+
+        System.out.println("<<<<<<<<<<<<<<<<<<<<< prevA " + prevAString + " prevB " + prevBString + " newA " + newAString + " newB " + newBString + " >>>>>>>>>>>>>>>>>>>>>");
+
+        assertEquals("A value didn't changed", prevA - 1, newA);
+        assertEquals("B value didn't changed", prevB + 1, newB);
+
+        chaincodeClient.invokeChaincode("mychannel", "mycc", "1.0", "invoke", new String[]{"b", "a", "1"});
+
+        newAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"a"});
+        newBString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[]{"b"});
+
+        newA = Integer.parseInt(newAString);
+        newB = Integer.parseInt(newBString);
+
+        assertEquals("A value changed", prevA, newA);
+        assertEquals("B value changed", prevB, newB);
+
+        System.out.println("<<<<<<<<<<<<<<<<<<<<< prevA " + prevAString + " prevB " + prevBString + " newA " + newAString + " newB " + newBString + " >>>>>>>>>>>>>>>>>>>>>");
+    }
 
 }

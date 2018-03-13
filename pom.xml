@@ -141,6 +141,7 @@
         <version>4.3.0</version>
         <configuration>
           <repoToken>YMQnabc2ProlatK9Vn1V5K8ib3H4NQLnB</repoToken>
+          <basedir>${project.basedir}/spring-data-chaincode</basedir>
         </configuration>
       </plugin>
     </plugins>

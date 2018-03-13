@@ -18,25 +18,22 @@ package org.springframework.data.chaincode.sdk.client;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
-import org.springframework.data.chaincode.events.FabricEventsConfig;
 
 /**
  * Default {@link ChaincodeClient} configuration, part of {@link AbstractChaincodeConfiguration}
  *
  * @author Gennady Laventman
- *
  */
 @Configuration
 //@Import({FabricEventsConfig.class})
 public class FabricClientConfig {
 
-	@Bean (name="chaincodeClient")
-	public ChaincodeClient chaincodeClient() {
+    @Bean(name = "chaincodeClient")
+    public ChaincodeClient chaincodeClient() {
 
-		ChaincodeClient client = new ChaincodeClientSDKImpl();
-		return client;
-	}
+        ChaincodeClient client = new ChaincodeClientSDKImpl();
+        return client;
+    }
 
 }

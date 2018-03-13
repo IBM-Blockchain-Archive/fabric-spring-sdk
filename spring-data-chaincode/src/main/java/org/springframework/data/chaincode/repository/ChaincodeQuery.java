@@ -16,18 +16,17 @@
 
 package org.springframework.data.chaincode.repository;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
- *  Annotation to mark chaincode interface method as query chaincode call
- *  Chaincode query not results in transaction written in ledger and used to check chain state
+ * Annotation to mark chaincode interface method as query chaincode call
+ * Chaincode query not results in transaction written in ledger and used to check chain state
  *
  * @author Gennady Laventman
- *
  */
 @Retention(RUNTIME)
 @Target(METHOD)

@@ -20,10 +20,10 @@ import org.springframework.dao.DataAccessException;
 
 public class EventException extends DataAccessException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public EventException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public EventException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -26,14 +26,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotation mark {@link Component} method as listener for specific channel block events
- * @author Gennady Laventman
  *
+ * @author Gennady Laventman
  */
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface BlockEventListener {
-	/**
-	 * Channel name
-	 */
-	String channel();
+    /**
+     * Channel name
+     */
+    String channel();
 }

@@ -24,21 +24,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChaincodeEventsListenerComponent {
-	
-	public int blockEvents;
-	public int ccEvents;
 
-	@BlockEventListener(channel = "mychannel")
-	public void hanldeBlockEvent(BlockEvent event) {
-		System.out.println(">> Got block event" + event);
-		blockEvents++;
-		
-	}
+    public int blockEvents;
+    public int ccEvents;
 
-	@ChaincodeEventListener(chaincode = EventsRepo.class)
-	public void handleChaincodeEventInEventsRepo(ChaincodeEvent event) {
-		System.out.println(">> Got chaincode event" + event);
-		ccEvents++;
-		
-	}
+    @BlockEventListener(channel = "mychannel")
+    public void hanldeBlockEvent(BlockEvent event) {
+        System.out.println(">> Got block event" + event);
+        blockEvents++;
+
+    }
+
+    @ChaincodeEventListener(chaincode = EventsRepo.class)
+    public void handleChaincodeEventInEventsRepo(ChaincodeEvent event) {
+        System.out.println(">> Got chaincode event" + event);
+        ccEvents++;
+
+    }
 }

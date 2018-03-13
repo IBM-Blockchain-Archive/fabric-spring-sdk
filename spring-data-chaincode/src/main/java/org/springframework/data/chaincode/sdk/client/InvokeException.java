@@ -20,13 +20,13 @@ import org.springframework.dao.DataAccessException;
 
 public class InvokeException extends DataAccessException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InvokeException(String message) {
-		super(message);
-	}
+    public InvokeException(String message) {
+        super(message);
+    }
 
-	public InvokeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public InvokeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

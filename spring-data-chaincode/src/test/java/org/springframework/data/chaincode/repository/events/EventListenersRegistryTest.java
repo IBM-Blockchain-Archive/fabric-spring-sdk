@@ -9,7 +9,7 @@ import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration(classes = { EventsInfrastructureConfig.class })
+@ContextConfiguration(classes = {EventsInfrastructureConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EventListenersRegistryTest {
 
@@ -23,11 +23,11 @@ public class EventListenersRegistryTest {
     private ChaincodeEventsListenerComponent component;
 
     @Test
-    public void testRegistry() throws Exception{
+    public void testRegistry() throws Exception {
         Assert.assertEquals("Number of block event listeners", 1, registry.getBlockEventListeners().size());
         Assert.assertEquals("Number of chaincode event listeners", 1, registry.getChaincodeEventListeners().size());
-        Assert.assertEquals("Registrated block event listeners ", 1, ((EventsInfrastructureConfig.TestChaincodeClient)chaincodeClient).chReg.size());
-        Assert.assertEquals("Registrated chaincode event listeners ", 1, ((EventsInfrastructureConfig.TestChaincodeClient)chaincodeClient).ccReg.size());
+        Assert.assertEquals("Registrated block event listeners ", 1, ((EventsInfrastructureConfig.TestChaincodeClient) chaincodeClient).chReg.size());
+        Assert.assertEquals("Registrated chaincode event listeners ", 1, ((EventsInfrastructureConfig.TestChaincodeClient) chaincodeClient).ccReg.size());
 
         registry.invokeBlockEventListeners("mychannel", null);
         registry.invokeChaincodeEventListener("mychannel", "eventcc", null);

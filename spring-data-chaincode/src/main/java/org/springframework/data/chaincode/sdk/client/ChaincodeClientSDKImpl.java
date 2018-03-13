@@ -16,24 +16,6 @@
 
 package org.springframework.data.chaincode.sdk.client;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.security.PrivateKey;
-import java.security.Security;
-import java.security.cert.Certificate;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -53,6 +35,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.chaincode.events.FabricEventsListenersRegistry;
+
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.cert.Certificate;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
@@ -143,7 +137,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     private void setKeyStoreLocation(String keyStoreLocation) throws Exception {
         logger.debug("Setting keystore {}", keyStoreLocation);
 
-        logger.debug("Looking for keystore file location at {} in file system", keyStoreLocation );
+        logger.debug("Looking for keystore file location at {} in file system", keyStoreLocation);
         File f = new File(keyStoreLocation);
         if (!f.exists()) {
             logger.debug("Can't find file {} in file system, looking as resource", keyStoreLocation);
@@ -318,10 +312,10 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
         // Verifying responses
         for (ProposalResponse proposal : responses) {
-        		if (!proposal.isVerified()) {
-        			logger.warn("Invalid proposal {}", proposal);
-        			throw new InvokeException(String.format("Invalid proposal %s", proposal));
-        		}
+            if (!proposal.isVerified()) {
+                logger.warn("Invalid proposal {}", proposal);
+                throw new InvokeException(String.format("Invalid proposal %s", proposal));
+            }
         }
         // Sending transaction to orderers
         logger.debug("Sending transaction for {} {}", func, args == null ? null : Arrays.asList(args));
@@ -409,7 +403,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         }
 
         if (exc != null) {
-            throw  exc;
+            throw exc;
         }
 
         return res;
@@ -436,10 +430,10 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             channel.registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
 
                 @Override
-               synchronized public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
+                synchronized public void received(String handle, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
                     try {
                         if (!handledChaincodeEvents.containsKey(chaincodeEvent.getTxId())) {
-                            handledChaincodeEvents.put(chaincodeEvent.getTxId(), (long)0);
+                            handledChaincodeEvents.put(chaincodeEvent.getTxId(), (long) 0);
                         }
                         handledChaincodeEvents.put(chaincodeEvent.getTxId(), handledChaincodeEvents.get(chaincodeEvent.getTxId()) + 1);
                         String es = blockEvent.getPeer() != null ? blockEvent.getPeer().getName() : blockEvent.getEventHub().getName();
@@ -481,7 +475,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 synchronized public void received(BlockEvent blockEvent) {
                     try {
                         if (!handledBlockEvents.containsKey(blockEvent.getBlockNumber())) {
-                            handledBlockEvents.put(blockEvent.getBlockNumber(), (long)0);
+                            handledBlockEvents.put(blockEvent.getBlockNumber(), (long) 0);
                         }
                         handledBlockEvents.put(blockEvent.getBlockNumber(), handledBlockEvents.get(blockEvent.getBlockNumber()) + 1);
                         logger.debug("Handling event for block {} channel {} {} time", blockEvent.getBlockNumber(), blockEvent.getChannelId(), handledBlockEvents.get(blockEvent.getBlockNumber()));

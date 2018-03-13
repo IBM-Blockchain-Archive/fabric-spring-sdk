@@ -31,66 +31,65 @@ import java.io.Serializable;
  * {@Link FactoryBean} to create {@link ChaincodeRepository} instances
  *
  * @author Gennady Laventman
- *
  */
 public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
-		extends RepositoryFactoryBeanSupport<T, S, ID> {
-	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactoryBean.class);
+        extends RepositoryFactoryBeanSupport<T, S, ID> {
+    private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactoryBean.class);
 
-	Class<? extends T> repositoryInterface;
+    Class<? extends T> repositoryInterface;
 
-	private RepositoryFactorySupport factory;
+    private RepositoryFactorySupport factory;
 
-	private T repository;
+    private T repository;
 
-	private ChaincodeClient chaincodeClient;
+    private ChaincodeClient chaincodeClient;
 
-	private RepositoryFragments repositoryFragments;
+    private RepositoryFragments repositoryFragments;
 
-	/**
-	 * Create new {@link ChaincodeRepositoryFactoryBean} for given repository interface
-	 *
-	 * @param repositoryInterface - must not be {@literal null}
-	 */
-	protected ChaincodeRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
-		super(repositoryInterface);
-		logger.debug("Creating FactoryBean for class " + repositoryInterface.getName());
-		this.repositoryInterface = repositoryInterface;
-	}
+    /**
+     * Create new {@link ChaincodeRepositoryFactoryBean} for given repository interface
+     *
+     * @param repositoryInterface - must not be {@literal null}
+     */
+    protected ChaincodeRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
+        super(repositoryInterface);
+        logger.debug("Creating FactoryBean for class " + repositoryInterface.getName());
+        this.repositoryInterface = repositoryInterface;
+    }
 
-	@Override
-	protected RepositoryFactorySupport createRepositoryFactory() {
-		logger.debug("Getting factory for class " + repositoryInterface.getName());
-		return new ChaincodeRepositoryFactory(repositoryInterface, chaincodeClient);
-	}
+    @Override
+    protected RepositoryFactorySupport createRepositoryFactory() {
+        logger.debug("Getting factory for class " + repositoryInterface.getName());
+        return new ChaincodeRepositoryFactory(repositoryInterface, chaincodeClient);
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		logger.debug("After properties set for factory bean " + repositoryInterface.getName());
-		factory = createRepositoryFactory();
-		repository = factory.getRepository(repositoryInterface, repositoryFragments);
-	}
+    @Override
+    public void afterPropertiesSet() {
+        logger.debug("After properties set for factory bean " + repositoryInterface.getName());
+        factory = createRepositoryFactory();
+        repository = factory.getRepository(repositoryInterface, repositoryFragments);
+    }
 
-	@Override
-	public T getObject() {
-		return repository;
-	}
+    @Override
+    public T getObject() {
+        return repository;
+    }
 
-	@Override
-	public Class<? extends T> getObjectType() {
-		return repositoryInterface;
-	}
+    @Override
+    public Class<? extends T> getObjectType() {
+        return repositoryInterface;
+    }
 
-	public void setChaincodeClient(ChaincodeClient chaincodeClient) {
-		this.chaincodeClient = chaincodeClient;
-	}
+    public void setChaincodeClient(ChaincodeClient chaincodeClient) {
+        this.chaincodeClient = chaincodeClient;
+    }
 
-	@Override
-	public void setRepositoryFragments(RepositoryFragments repositoryFragments) {
-		logger.debug("Set repository fragments for {} fragments {}", repositoryInterface.getName(), repositoryFragments);
-		this.repositoryFragments = repositoryFragments;
-		super.setRepositoryFragments(repositoryFragments);
-	}
+    @Override
+    public void setRepositoryFragments(RepositoryFragments repositoryFragments) {
+        logger.debug("Set repository fragments for {} fragments {}", repositoryInterface.getName(), repositoryFragments);
+        this.repositoryFragments = repositoryFragments;
+        super.setRepositoryFragments(repositoryFragments);
+    }
 
 
 }

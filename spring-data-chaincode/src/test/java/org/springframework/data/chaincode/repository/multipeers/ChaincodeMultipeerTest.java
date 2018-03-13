@@ -26,77 +26,76 @@ import org.testcontainers.containers.DockerComposeContainer;
 
 import java.io.File;
 
-@ContextConfiguration(classes = { TestConfig.class })
+@ContextConfiguration(classes = {TestConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeMultipeerTest {
 
-	@ClassRule
-	public static DockerComposeContainer env = new DockerComposeContainer(
-			new File("src/test/resources/first-network/docker-compose-cli.yaml")).withLocalCompose(false).withPull(false);
+    @ClassRule
+    public static DockerComposeContainer env = new DockerComposeContainer(
+            new File("src/test/resources/first-network/docker-compose-cli.yaml")).withLocalCompose(false).withPull(false);
 
-	@Autowired
+    @Autowired
     EventsRepo eventsRepo;
 
-	@Autowired
-	Example02 example02;
+    @Autowired
+    Example02 example02;
 
 
-	@Autowired
+    @Autowired
     ChaincodeEventsListenerComponent listener;
 
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
 
-	@Test
-	public void testEvents() throws Exception {
-		listener.blockEvents = 0;
-		listener.ccEvents = 0;
+    @Test
+    public void testEvents() throws Exception {
+        listener.blockEvents = 0;
+        listener.ccEvents = 0;
 
-		int prevEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
+        int prevEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		eventsRepo.invoke();
+        eventsRepo.invoke();
 
-		eventsRepo.invoke();
+        eventsRepo.invoke();
 
-		int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
+        int newEvents = Integer.decode(eventsRepo.query().split(":")[1].split("}")[0].split("\"")[1]);
 
-		Assert.assertEquals("", prevEvents + 2, newEvents);
+        Assert.assertEquals("", prevEvents + 2, newEvents);
 
-		Assert.assertEquals("", 4, listener.blockEvents);
-		Assert.assertEquals("", 4, listener.ccEvents);
+        Assert.assertEquals("", 4, listener.blockEvents);
+        Assert.assertEquals("", 4, listener.ccEvents);
 
-	}
+    }
 
-	@Test
-	public void testExample02() throws Exception {
+    @Test
+    public void testExample02() throws Exception {
 
-		Assert.assertNotNull(example02);
+        Assert.assertNotNull(example02);
 
-		String aString1 = example02.query("a");
-		String bString1 = example02.query("b");
+        String aString1 = example02.query("a");
+        String bString1 = example02.query("b");
 
-		int a1 = Integer.decode(aString1);
-		int b1 = Integer.decode(bString1);
+        int a1 = Integer.decode(aString1);
+        int b1 = Integer.decode(bString1);
 
-		example02.invoke("a", "b", "20");
-		String aString2 = example02.query("a");
-		String bString2 = example02.query("b");
+        example02.invoke("a", "b", "20");
+        String aString2 = example02.query("a");
+        String bString2 = example02.query("b");
 
-		int a2 = Integer.decode(aString2);
-		int b2 = Integer.decode(bString2);
+        int a2 = Integer.decode(aString2);
+        int b2 = Integer.decode(bString2);
 
-		Assert.assertEquals("", a1, a2 + 20);
-		Assert.assertEquals("", b2, b1 + 20);
+        Assert.assertEquals("", a1, a2 + 20);
+        Assert.assertEquals("", b2, b1 + 20);
 
-	}
-
+    }
 
 
 }

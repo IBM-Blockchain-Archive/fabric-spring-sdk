@@ -19,9 +19,9 @@ package org.springframework.data.chaincode.sdk.client;
 import org.springframework.dao.DataAccessException;
 
 public class InitException extends DataAccessException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InitException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public InitException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

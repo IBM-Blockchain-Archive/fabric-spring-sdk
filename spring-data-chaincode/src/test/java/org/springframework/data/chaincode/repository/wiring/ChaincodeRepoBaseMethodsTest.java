@@ -21,13 +21,13 @@ public class ChaincodeRepoBaseMethodsTest {
     @Test
     public void testBaseMethodDirect() {
         Assert.assertNotNull(testRepo1);
-        Assert.assertArrayEquals("Wrong instantiate result", new String[] {"instantiated"}, new String[] {testRepo1.instantiate()});
+        Assert.assertArrayEquals("Wrong instantiate result", new String[]{"instantiated"}, new String[]{testRepo1.instantiate()});
 
     }
 
     @Test
     public void testBaseMethodWithInherirance() {
         Assert.assertNotNull(testRepo31);
-        Assert.assertArrayEquals("Wrong instantiate result", new String[] {"instantiated"}, new String[] {testRepo31.instantiate()});
+        Assert.assertArrayEquals("Wrong instantiate result", new String[]{"instantiated"}, new String[]{testRepo31.instantiate()});
     }
 }

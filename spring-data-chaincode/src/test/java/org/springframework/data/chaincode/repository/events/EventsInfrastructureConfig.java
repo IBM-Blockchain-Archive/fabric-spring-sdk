@@ -17,7 +17,7 @@ import java.util.List;
 @EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.events"})
 public class EventsInfrastructureConfig {
 
-    @Bean(name="chaincodeClient")
+    @Bean(name = "chaincodeClient")
     public ChaincodeClient chaincodeClient() {
 
         ChaincodeClient client = new TestChaincodeClient();

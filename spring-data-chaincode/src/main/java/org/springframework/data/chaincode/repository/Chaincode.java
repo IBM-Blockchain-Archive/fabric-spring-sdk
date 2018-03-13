@@ -16,40 +16,39 @@
 
 package org.springframework.data.chaincode.repository;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 
 /**
  * Annotation contains chaincode info, used to mark interface as chaincode interface
  *
  * @author Gennady Laventman
- *
  */
 @Retention(RUNTIME)
-@Target({ TYPE, METHOD })
+@Target({TYPE, METHOD})
 public @interface Chaincode {
-	/**
-	 * Chaincode version
-	 */
-	String version();
+    /**
+     * Chaincode version
+     */
+    String version();
 
-	/**
-	 * Channel chaincode instantiated on
-	 */
-	String channel() default "";
+    /**
+     * Channel chaincode instantiated on
+     */
+    String channel() default "";
 
-	/**
-	 * Chaincode name
-	 */
-	String name();
+    /**
+     * Chaincode name
+     */
+    String name();
 
-	/**
-	 * Chaincode code location in local file system
-	 */
-	String location() default "";
+    /**
+     * Chaincode code location in local file system
+     */
+    String location() default "";
 
 }

@@ -23,10 +23,10 @@ import org.springframework.data.chaincode.repository.ChaincodeRepository;
 
 @Chaincode(channel = "mychannel", name = "eventcc", version = "1.0")
 public interface EventsRepo extends ChaincodeRepository {
-	@ChaincodeInvoke
-	String invoke();
-	
-	@ChaincodeQuery
-	String query();
+    @ChaincodeInvoke
+    String invoke();
+
+    @ChaincodeQuery
+    String query();
 
 }
