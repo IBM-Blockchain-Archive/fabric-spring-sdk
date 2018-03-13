@@ -1,6 +1,6 @@
 # Spring Data for Hyperledger Fabric
 
-[![Build Status](https://travis-ci.org/gennadylaventman/spring-data-chaincode.svg?branch=master)](https://travis-ci.org/gennadylaventman/spring-data-chaincode)
+[![Build Status](https://img.shields.io/travis/gennadylaventman/spring-data-chaincode/master.svg)](https://travis-ci.org/gennadylaventman/spring-data-chaincode)
 
 [![Coverage Status](https://img.shields.io/coveralls/github/gennadylaventman/spring-data-chaincode/master.svg)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode)
 
