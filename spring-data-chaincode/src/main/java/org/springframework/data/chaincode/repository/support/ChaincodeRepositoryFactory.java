@@ -47,8 +47,6 @@ import java.util.Optional;
 public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryFactory.class);
 
-	private ClassLoader classLoader;
-
 	private SimpleChaincodeRepository targetRepository;
 
 	private ChaincodeClient chaincodeClient;
@@ -63,7 +61,6 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		super();
 		this.chaincodeClient = chaincodeClient;
 		logger.debug("Creating chaincode bean factory");
-		this.classLoader = org.springframework.util.ClassUtils.getDefaultClassLoader();
 		Chaincode annotation = AnnotationUtils.findAnnotation(repositoryInterface, Chaincode.class);
 		String channelName = annotation.channel();
 		Channel channel= AnnotationUtils.findAnnotation(repositoryInterface, Channel.class);
@@ -93,13 +90,6 @@ public class ChaincodeRepositoryFactory extends RepositoryFactorySupport {
 		logger.debug("Creating proxy for {}, fragments {}", repositoryInterface.getSimpleName(), fragments);
 
 		return super.getRepository(repositoryInterface, fragments);
-	}
-
-	@Override
-	public void setBeanClassLoader(ClassLoader classLoader) {
-		logger.debug("Setting bean class loader");
-		this.classLoader = classLoader;
-		super.setBeanClassLoader(classLoader);
 	}
 
 	private class ChaincodeMethodLookupStrategy implements QueryLookupStrategy {

@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.PrivateKey;
 import java.security.Security;
@@ -109,17 +110,17 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
     @Autowired
     @Qualifier("privateKeyLocation")
-    private void SetPrivateKeyLocation(String privateKeyLocation) {
-        logger.debug(String.format("Setting private key file %s", privateKeyLocation));
+    private void setPrivateKeyLocation(String privateKeyLocation) {
+        logger.debug("Setting private key file {}", privateKeyLocation);
         PrivateKeyInfo pemPair;
 
-        logger.debug("Looking for private key file location at " + privateKeyLocation + " in file system");
+        logger.debug("Looking for private key file location at {} in file system", privateKeyLocation);
         File f = new File(privateKeyLocation);
         if (!f.exists()) {
-            logger.debug("Can't find file " + privateKeyLocation + " in file system, looking as resource");
-            f = new File(getClass().getClassLoader().getResource(privateKeyLocation).getFile());
-            if (!f.exists()) {
-                logger.warn("Can't find file " + privateKeyLocation + " not in file system, nor as resource, let's hope we will have private key somehow later");
+            logger.debug("Can't find file {} in file system, looking as resource", privateKeyLocation);
+            URL resource = getClass().getClassLoader().getResource(privateKeyLocation);
+            if (resource == null || !(f = new File(resource.getFile())).exists()) {
+                logger.warn("Can't find file {} not in file system, nor as resource, let's hope we will have private key somehow later", privateKeyLocation);
                 return;
             }
         }
@@ -134,21 +135,21 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         } catch (Exception e) {
             logger.warn("Exception while loading private key", e);
         }
-        logger.debug(String.format("Done setting private key file %s", privateKeyLocation));
+        logger.debug("Done setting private key file {}", privateKeyLocation);
     }
 
     @Autowired(required = false)
     @Qualifier("keyStoreLocation")
     private void setKeyStoreLocation(String keyStoreLocation) throws Exception {
-        logger.debug(String.format("Setting keystore %s", keyStoreLocation));
+        logger.debug("Setting keystore {}", keyStoreLocation);
 
-        logger.debug("Looking for keystore file location at " + keyStoreLocation + " in file system");
+        logger.debug("Looking for keystore file location at {} in file system", keyStoreLocation );
         File f = new File(keyStoreLocation);
         if (!f.exists()) {
-            logger.debug("Can't find file " + keyStoreLocation + " in file system, looking as resource");
-            f = new File(getClass().getClassLoader().getResource(keyStoreLocation).getFile());
-            if (!f.exists()) {
-                logger.warn("Can't find file " + keyStoreLocation + " not in file system, nor as resource, let's hope we will have keystore somehow later");
+            logger.debug("Can't find file {} in file system, looking as resource", keyStoreLocation);
+            URL resource = getClass().getClassLoader().getResource(keyStoreLocation);
+            if (resource == null || !(f = new File(resource.getFile())).exists()) {
+                logger.warn("Can't find file not in file system, nor as resource, let's hope we will have keystore somehow later", keyStoreLocation);
                 return;
             }
         }
@@ -501,5 +502,12 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         return;
     }
 
+    PrivateKey getPrivateKey() {
+        return privateKey;
+    }
+
+    String getUserSigningCert() {
+        return userSigningCert;
+    }
 
 }

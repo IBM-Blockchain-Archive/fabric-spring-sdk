@@ -81,10 +81,6 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 		return repositoryInterface;
 	}
 
-	public Class<? extends T> getRepositoryInterface() {
-		return repositoryInterface;
-	}
-
 	public void setChaincodeClient(ChaincodeClient chaincodeClient) {
 		this.chaincodeClient = chaincodeClient;
 	}

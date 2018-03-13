@@ -21,10 +21,6 @@ import org.springframework.dao.DataAccessException;
 public class InitException extends DataAccessException {
 	private static final long serialVersionUID = 1L;
 
-	public InitException(String message) {
-		super(message);
-	}
-
 	public InitException(String message, Throwable cause) {
 		super(message, cause);
 	}

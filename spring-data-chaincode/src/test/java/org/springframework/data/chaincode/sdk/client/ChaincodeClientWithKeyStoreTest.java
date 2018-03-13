@@ -51,7 +51,7 @@ public class ChaincodeClientWithKeyStoreTest {
 	ChaincodeClient chaincodeClient;
 
 	@Test
-	public void testClient() throws InterruptedException {
+	public void testClient() {
 		
 		
 		String prevAString = chaincodeClient.invokeQuery("mychannel", "mycc", "1.0", "query", new String[] {"a"});
