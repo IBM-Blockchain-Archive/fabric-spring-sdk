@@ -1,10 +1,11 @@
-package org.springframework.data.chaincode.repository.events.wiring;
+package org.springframework.data.chaincode.repository.events;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.chaincode.events.FabricEventsConfig;
+import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @Configuration
 @ComponentScan
 @Import({FabricEventsConfig.class})
+@EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.events"})
 public class EventsInfrastructureConfig {
 
     @Bean(name="chaincodeClient")
