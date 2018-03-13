@@ -21,3 +21,12 @@ before_install:
   - docker tag hyperledger/fabric-ccenv:x86_64-1.1.0-rc1 hyperledger/fabric-ccenv:latest
   - docker tag hyperledger/fabric-couchdb:x86_64-1.0.6 hyperledger/fabric-couchdb:latest
   - docker images
+
+install:
+  - mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+script:
+  - mvn test jacoco:report
+
+after_success:
+  - mvn coveralls:report
