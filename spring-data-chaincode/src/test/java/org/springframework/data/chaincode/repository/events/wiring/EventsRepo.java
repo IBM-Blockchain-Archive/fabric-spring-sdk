@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.events;
+package org.springframework.data.chaincode.repository.events.wiring;
 
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeInvoke;

@@ -32,6 +32,7 @@ import java.util.List;
 public class FabricEventsListenersRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(FabricEventsListenersRegistry.class);
 
+
 	List<ChaincodeEventListenerEntry> chaincodeEventListeners = new ArrayList<>();
 	List<BlockEventListenerEntry> blockEventListeners = new ArrayList<>();
 
@@ -139,5 +140,17 @@ public class FabricEventsListenersRegistry {
 
 		}
 	}
+
+
+	/* For unit-test */
+	public List<ChaincodeEventListenerEntry> getChaincodeEventListeners() {
+		return chaincodeEventListeners;
+	}
+
+	/* For unit-test */
+	public List<BlockEventListenerEntry> getBlockEventListeners() {
+		return blockEventListeners;
+	}
+
 
 }

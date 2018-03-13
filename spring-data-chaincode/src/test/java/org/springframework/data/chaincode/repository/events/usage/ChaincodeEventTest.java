@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.events;
+package org.springframework.data.chaincode.repository.events.usage;
 
 import org.junit.*;
 import org.junit.runner.RunWith;

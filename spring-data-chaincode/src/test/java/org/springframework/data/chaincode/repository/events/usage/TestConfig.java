@@ -14,7 +14,7 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.events;
+package org.springframework.data.chaincode.repository.events.usage;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +44,8 @@ import java.util.Map;
 			}
 		)
 })
-@EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.events"})
+
+@EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.events.usage"})
 public class TestConfig extends AbstractChaincodeConfiguration{
 	@Bean (name = "privateKeyLocation")
 	public String privateKeyLocation() {

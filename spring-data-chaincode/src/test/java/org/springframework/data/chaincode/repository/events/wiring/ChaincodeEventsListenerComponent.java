@@ -14,12 +14,13 @@
  *
  */
 
-package org.springframework.data.chaincode.repository.events;
+package org.springframework.data.chaincode.repository.events.wiring;
 
 import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.ChaincodeEvent;
 import org.springframework.data.chaincode.events.BlockEventListener;
 import org.springframework.data.chaincode.events.ChaincodeEventListener;
+import org.springframework.data.chaincode.repository.events.usage.EventsRepo;
 import org.springframework.stereotype.Component;
 
 @Component

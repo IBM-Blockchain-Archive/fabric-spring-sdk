@@ -101,7 +101,6 @@ public class ChaincodeRepositoryConfigurationExtension extends RepositoryConfigu
 			}
 		}
 
-
 		return super.isStrictRepositoryCandidate(metadata);
 	}
 

@@ -117,7 +117,6 @@ you should add/update `peerLocations`/`ordererLocations` beans and to use TLS wh
 
 public class TestConfig extends AbstractChaincodeConfiguration{
 
-...
     @Override
     @Bean (name = "peerLocations")
     public Map<String, String> peerLocations() {
@@ -126,7 +125,6 @@ public class TestConfig extends AbstractChaincodeConfiguration{
         return res;
     }
 
-	
 	@Bean(name =  "peerProperties")
 	public Map<String, Properties> peerProperties() throws IOException{
 		Properties peer0Properties = new Properties();
@@ -141,10 +139,9 @@ public class TestConfig extends AbstractChaincodeConfiguration{
 		propertiesMap.put("peer0", peer0Properties);
 		return propertiesMap;
 	}
-	...
 }
-
 ```
+
 
 For full example, including orderer configuration and client security credentials, see `src/test/java/org/springframework/data/chaincode/repository/multipeers` test.
 
