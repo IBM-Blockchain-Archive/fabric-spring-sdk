@@ -21,6 +21,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.chaincode.repository.utils.DockerUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.DockerComposeContainer;
@@ -43,7 +44,7 @@ public class ChaincodeClientWithKeyStoreTest {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		TimeUnit.SECONDS.sleep(15);
+		DockerUtils.waitForContainers(new String[]{"peer0"});
 	}
 
 	@Autowired
