@@ -61,8 +61,7 @@
 
     <!-- Test -->
     <junit.version>4.12</junit.version>
-    <testcontainers.version>1.5.1</testcontainers.version>
-    <testcontainers.docker-compose.version>0.9.9</testcontainers.docker-compose.version>
+    <testcontainers.version>1.7.1</testcontainers.version>
   </properties>
 
   <build>
