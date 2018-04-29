@@ -26,8 +26,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotation mark {@link Component} method as listener for specific chaincode events, defined by chaincode repository
- * @author Gennady Laventman
  *
+ * @author Gennady Laventman
  */
 @Retention(RUNTIME)
 @Target(METHOD)

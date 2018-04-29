@@ -1,6 +1,7 @@
 # Spring Data for Hyperledger Fabric
 
-[![Coverage Status](https://coveralls.io/repos/github/gennadylaventman/spring-data-chaincode/badge.svg?branch=master)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode?branch=master)
+[![Build Status](https://img.shields.io/travis/gennadylaventman/spring-data-chaincode/master.svg)](https://travis-ci.org/gennadylaventman/spring-data-chaincode)
+[![Coverage Status](https://img.shields.io/coveralls/github/gennadylaventman/spring-data-chaincode/master.svg)](https://coveralls.io/github/gennadylaventman/spring-data-chaincode)
 
 The primary goal of the [Spring Data](http://projects.spring.io/spring-data) project is to make it easier to build Spring-powered applications that use new data access technologies such as non-relational databases, map-reduce frameworks, and cloud based data services.
 
@@ -48,9 +49,34 @@ public interface SimpleAssetRepository extends ChaincodeRepository {
 }
 ```
 
-Each method execution will cause execution of corresponding chaincode method.
- `set()` method will cause to chaincode invoke: `peer chaincode invoke -n sacc -c '{"Args":["set", "a", "20"]}' -C mychannel`.
+Each method execution will cause execution of corresponding chaincode method.  
+ `set()` method will cause to chaincode invoke: `peer chaincode invoke -n sacc -c '{"Args":["set", "a", "20"]}' -C mychannel`.  
  `get()` method will cause to chaincode query: `peer chaincode query -n sacc -c '{"Args":["query","a"]}' -C mychannel`.
+
+#### Usage 
+
+Following example will find the repository interface and register a proxy object in the container. You can use it as shown below:
+
+```java
+@Service
+public class MyService {
+
+  private final SimpleAssetRepository repository;
+
+  @Autowired
+  public MyService(SimpleAssetRepository repository) {
+    this.repository = repository;
+  }
+
+  public void doWork() {
+
+  	 repository.set("a", "Hello, world");
+  	 System.out.println(repository.get("a"));
+ }
+}
+```
+
+#### Java config
 
 You can have Spring automatically create a proxy for the interface by using the following JavaConfig:
 
@@ -79,25 +105,44 @@ public class SimpleAssetConfig extends AbstractChaincodeConfiguration {
 
 This sets up a connection to a local Hyperledger Fabric instance and enables the detection of chaincode interfaces (repositories) (through `@EnableChaincodeRepositories`).
 
-This will find the repository interface and register a proxy object in the container. You can use it as shown below:
+In example above all you have to provide is client security credentials, the rest in the example provided by `AbstractChaincodeConfiguration`. 
+
+`AbstractChaincodeConfiguration` above contains default location of peers: `peerLocations`, orderers - `ordererLocations` and event hub peers - `eventHubLocations`
+ and configured to use “basic-network” sample as its limited development network. The network consists of a single peer node, a single “solo” ordering node, a certificate authority (CA) and a CLI container for executing commands, without TLS. 
+For more information see [Build your first network](http://hyperledger-fabric.readthedocs.io/en/release-1.0/build_network.html) and [Fabric Samples](https://github.com/hyperledger/fabric-samples)
+
+To use more robust network, like `first-network` from Fabric Samples, you have to enreach Java Configuration. In case of more that one peer/orderer,
+you should add/update `peerLocations`/`ordererLocations` beans and to use TLS while connecting to network, you should provide TLS configuration, including certificates for each peer/orderer you want to communicate. See first-network TLS example below
 
 ```java
-@Service
-public class MyService {
 
-  private final SimpleAssetRepository repository;
+public class TestConfig extends AbstractChaincodeConfiguration{
 
-  @Autowired
-  public MyService(SimpleAssetRepository repository) {
-    this.repository = repository;
-  }
+    @Override
+    @Bean (name = "peerLocations")
+    public Map<String, String> peerLocations() {
+        final Map<String, String> res = new HashMap<>();
+        res.put("peer0", "grpcs://localhost:7051");
+        return res;
+    }
 
-  public void doWork() {
+	@Bean(name =  "peerProperties")
+	public Map<String, Properties> peerProperties() throws IOException{
+		Properties peer0Properties = new Properties();
+		String peer0PemFileLocation = "first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt";
+		File peer0PemFile = new File(getClass().getClassLoader().getResource(peer0PemFileLocation).getFile());
+		peer0Properties.setProperty("pemFile", peer0PemFile.getCanonicalPath());
+		peer0Properties.setProperty("hostnameOverride", "peer0.org1.example.com");
+		peer0Properties.setProperty("sslProvider", "openSSL");
+		peer0Properties.setProperty("negotiationType", "TLS");
 
-  	 repository.set("a", "Hello, world");
-  	 System.out.println(repository.get("a"));
- }
+		final Map<String, Properties> propertiesMap = new HashMap<>();
+		propertiesMap.put("peer0", peer0Properties);
+		return propertiesMap;
+	}
 }
 ```
 
+
+For full example, including orderer configuration and client security credentials, see `src/test/java/org/springframework/data/chaincode/repository/multipeers` test.
 

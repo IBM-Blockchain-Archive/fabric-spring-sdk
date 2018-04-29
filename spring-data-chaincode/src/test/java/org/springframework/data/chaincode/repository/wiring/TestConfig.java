@@ -33,40 +33,40 @@ import java.util.List;
 @EnableChaincodeRepositories(basePackages = {"org.springframework.data.chaincode.repository.wiring"})
 public class TestConfig {
 
-	public class TestChaincodeClient implements ChaincodeClient{
+    public class TestChaincodeClient implements ChaincodeClient {
 
-		public List<String> ccReg = new ArrayList<>();
-		public List<String> chReg = new ArrayList<>();
-
-
-		@Override
-		public String invokeQuery(String chName, String ccName, String ccVer, String func, String[] args) {
-			return "queried";
-		}
+        public List<String> ccReg = new ArrayList<>();
+        public List<String> chReg = new ArrayList<>();
 
 
-		@Override
-		public String invokeChaincode(String chName, String ccName, String ccVer, String func, String[] args) {
-			return "invoked";
-		}
+        @Override
+        public String invokeQuery(String chName, String ccName, String ccVer, String func, String[] args) {
+            return "queried";
+        }
 
-		@Override
-		public void startChaincodeEventsListener(String chName, String ccName) {
-			if (!ccReg.contains(ccName))
-				ccReg.add(ccName);
 
-		}
+        @Override
+        public String invokeChaincode(String chName, String ccName, String ccVer, String func, String[] args) {
+            return "invoked";
+        }
 
-		@Override
-		public void startBlockEventsListener(String chName) {
-			if (!chReg.contains(chName))
-				chReg.add(chName);
-		}
-	}
+        @Override
+        public void startChaincodeEventsListener(String chName, String ccName) {
+            if (!ccReg.contains(ccName))
+                ccReg.add(ccName);
 
-	@Bean
-	public ChaincodeClient chaincodeClient() {
-		return new TestChaincodeClient();
-	}
+        }
+
+        @Override
+        public void startBlockEventsListener(String chName) {
+            if (!chReg.contains(chName))
+                chReg.add(chName);
+        }
+    }
+
+    @Bean
+    public ChaincodeClient chaincodeClient() {
+        return new TestChaincodeClient();
+    }
 
 }

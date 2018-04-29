@@ -21,6 +21,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class MyMain {
 
 	public static void main(String[] args) {
+		doWork();
+	}
+
+	public static void doWork() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SimpleAssetConfig.class);
 
 		try {
@@ -29,6 +33,7 @@ public class MyMain {
 			e.printStackTrace();
 		}
 		context.close();
+
 	}
 
 }

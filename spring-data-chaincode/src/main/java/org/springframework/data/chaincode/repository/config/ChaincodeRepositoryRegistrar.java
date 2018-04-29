@@ -16,8 +16,6 @@
 
 package org.springframework.data.chaincode.repository.config;
 
-import java.lang.annotation.Annotation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -26,30 +24,31 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.data.repository.config.RepositoryBeanDefinitionRegistrarSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
+import java.lang.annotation.Annotation;
+
 /**
  * {@link ImportBeanDefinitionRegistrar} to setup Chaincode repositories via {@link EnableChaincodeRepositories}.
  *
  * @author Gennady Laventman
- *
  */
 public class ChaincodeRepositoryRegistrar extends RepositoryBeanDefinitionRegistrarSupport {
-	private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryRegistrar.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChaincodeRepositoryRegistrar.class);
 
-	@Override
-	protected Class<? extends Annotation> getAnnotation() {
-		return EnableChaincodeRepositories.class;
-	}
+    @Override
+    protected Class<? extends Annotation> getAnnotation() {
+        return EnableChaincodeRepositories.class;
+    }
 
-	@Override
-	protected RepositoryConfigurationExtension getExtension() {
-		return new ChaincodeRepositoryConfigurationExtension();
-	}
+    @Override
+    protected RepositoryConfigurationExtension getExtension() {
+        return new ChaincodeRepositoryConfigurationExtension();
+    }
 
-	@Override
-	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-		logger.debug("Starting beans registration");
-		super.registerBeanDefinitions(annotationMetadata, registry);
-		logger.debug("Done beans registration");
-	}
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
+        logger.debug("Starting beans registration");
+        super.registerBeanDefinitions(annotationMetadata, registry);
+        logger.debug("Done beans registration");
+    }
 
 }

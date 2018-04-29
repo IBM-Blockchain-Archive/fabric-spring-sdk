@@ -22,37 +22,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FabricEventsConfig {
 
-	private FabricEventsAnnotationsBeanPostProcessor fabricEventsAnnotationsBeanPostProcessor;
-	private FabricEventsPostInitContextListener fabricEventsPostInitContextListener;
-	private FabricEventsListenersRegistry fabricEventsListenersRegistry;
+    public FabricEventsConfig() {
+    }
 
-	public FabricEventsConfig() {
-		System.out.println("Instantiating FabricEventsConfig");
-	}
+    @Bean(name = "chaincodeEventListenerAnnotationBeanPostProcessor")
+    public FabricEventsAnnotationsBeanPostProcessor chaincodeEventListenerAnnotationBeanPostProcessor() {
+        return new FabricEventsAnnotationsBeanPostProcessor();
+    }
 
-	@Bean(name = "chaincodeEventListenerAnnotationBeanPostProcessor")
-	public FabricEventsAnnotationsBeanPostProcessor chaincodeEventListenerAnnotationBeanPostProcessor() {
-		if (fabricEventsAnnotationsBeanPostProcessor == null) {
-			fabricEventsAnnotationsBeanPostProcessor = new FabricEventsAnnotationsBeanPostProcessor();
-		}
-		return fabricEventsAnnotationsBeanPostProcessor;
-	}
+    @Bean(name = "fabricEventsPostInitContextListener")
+    public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
+        return new FabricEventsPostInitContextListener();
+    }
 
-	@Bean(name = "fabricEventsPostInitContextListener")
-	public FabricEventsPostInitContextListener fabricEventsPostInitContextListener() {
-		if (fabricEventsPostInitContextListener == null) {
-			fabricEventsPostInitContextListener = new FabricEventsPostInitContextListener();
-		}
-		return fabricEventsPostInitContextListener;
-	}
-
-	@Bean(name = "fabricEventsListenersRegistry")
-	public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
-		if (fabricEventsListenersRegistry == null) {
-			System.out.println("Creating new fabricEventsListenersRegistry");
-			fabricEventsListenersRegistry = new FabricEventsListenersRegistry();
-		}
-		return fabricEventsListenersRegistry;
-	}
+    @Bean(name = "fabricEventsListenersRegistry")
+    public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
+        return new FabricEventsListenersRegistry();
+    }
 
 }

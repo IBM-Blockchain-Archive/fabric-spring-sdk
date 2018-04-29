@@ -29,25 +29,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(classes = {TestConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeCustomRepoTest {
-	private static AnnotationConfigApplicationContext context;
+    private static AnnotationConfigApplicationContext context;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		context = new AnnotationConfigApplicationContext(TestConfig.class);
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        context = new AnnotationConfigApplicationContext(TestConfig.class);
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		context.close();
-	}
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        context.close();
+    }
 
-	@Autowired
-	private TestRepo4 testRepo;
+    @Autowired
+    private TestRepo4 testRepo;
 
-	@Test
-	public void testCustomImpl() {
-        Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo.invokeMethod("asdf")});
-        Assert.assertArrayEquals("Wrong result for custom method call", new String[] {"customMethod"}, new String[] {testRepo.customMethod()});
-	}
+    @Test
+    public void testCustomImpl() {
+        Assert.assertArrayEquals("Wrong invoke result", new String[]{"invoked"}, new String[]{testRepo.invokeMethod("asdf")});
+        Assert.assertArrayEquals("Wrong result for custom method call", new String[]{"customMethod"}, new String[]{testRepo.customMethod()});
+    }
 
 }

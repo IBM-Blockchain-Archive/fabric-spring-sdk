@@ -37,8 +37,8 @@ public class ChaincodeEventWiringTest {
         Assert.assertNotNull(chaincodeClient);
         Assert.assertNotNull(component);
 
-        Assert.assertEquals(1, ((TestConfig.TestChaincodeClient)chaincodeClient).ccReg.size());
-        Assert.assertEquals(1, ((TestConfig.TestChaincodeClient)chaincodeClient).chReg.size());
+        Assert.assertEquals(1, ((TestConfig.TestChaincodeClient) chaincodeClient).ccReg.size());
+        Assert.assertEquals(1, ((TestConfig.TestChaincodeClient) chaincodeClient).chReg.size());
 
     }
 

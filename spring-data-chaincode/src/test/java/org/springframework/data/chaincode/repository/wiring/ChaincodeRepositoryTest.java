@@ -29,58 +29,58 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeRepositoryTest {
 
-	@Autowired
-	@Qualifier("testRepo1")
-	private TestRepo1 testRepo1;
+    @Autowired
+    @Qualifier("testRepo1")
+    private TestRepo1 testRepo1;
 
-	@Autowired
-	private TestRepo31 testRepo31;
+    @Autowired
+    private TestRepo31 testRepo31;
 
-	private static AnnotationConfigApplicationContext context;
+    private static AnnotationConfigApplicationContext context;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		context = new AnnotationConfigApplicationContext(TestConfig.class);
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        context = new AnnotationConfigApplicationContext(TestConfig.class);
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		context.close();
-	}
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        context.close();
+    }
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
 
-	@Test
-	public void testCorrectRepo() {
+    @Test
+    public void testCorrectRepo() {
         Assert.assertNotNull(testRepo1);
 
-        Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo1.invokeMethod("asdf")});
-        Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo1.qMethod("wert")});
-	}
+        Assert.assertArrayEquals("Wrong invoke result", new String[]{"invoked"}, new String[]{testRepo1.invokeMethod("asdf")});
+        Assert.assertArrayEquals("Wrong query result", new String[]{"queried"}, new String[]{testRepo1.qMethod("wert")});
+    }
 
-	@Test
-	public void testRepoWithoutAnnotation() {
-         try {
+    @Test
+    public void testRepoWithoutAnnotation() {
+        try {
             TestRepo2 testRepo2 = context.getBean(TestRepo2.class);
-		} catch (NoSuchBeanDefinitionException e) {
-			return;
-		}
-        	Assert.fail("TestRepo2 repository should not instantiated");
- 	}
+        } catch (NoSuchBeanDefinitionException e) {
+            return;
+        }
+        Assert.fail("TestRepo2 repository should not instantiated");
+    }
 
-	@Test
-	public void testRepoWithInheritance() {
+    @Test
+    public void testRepoWithInheritance() {
         Assert.assertNotNull(testRepo31);
 
-		Assert.assertArrayEquals("Wrong invoke result", new String[] {"invoked"}, new String[] {testRepo31.invokeMethod("asdf")});
-		Assert.assertArrayEquals("Wrong query result", new String[] {"queried"}, new String[] {testRepo31.qMethod("wert")});
-	}
+        Assert.assertArrayEquals("Wrong invoke result", new String[]{"invoked"}, new String[]{testRepo31.invokeMethod("asdf")});
+        Assert.assertArrayEquals("Wrong query result", new String[]{"queried"}, new String[]{testRepo31.qMethod("wert")});
+    }
 
 }

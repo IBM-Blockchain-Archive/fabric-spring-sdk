@@ -99,7 +99,6 @@ public class ChaincodeRepositoryQuery implements RepositoryQuery {
                 logger.debug("Can't find method {} with arguments {}", method.getName(), method.getParameterTypes());
             }
         }
-
         return null;
     }
 

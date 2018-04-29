@@ -17,9 +17,8 @@
 package org.springframework.data.chaincode.sdk.client;
 
 
-import org.springframework.data.chaincode.repository.Chaincode;
-
 import com.google.protobuf.ByteString;
+import org.springframework.data.chaincode.repository.Chaincode;
 
 /**
  * Interface that expose basic chaincode operations to package
@@ -28,40 +27,44 @@ import com.google.protobuf.ByteString;
  */
 public interface ChaincodeClient {
 
-	/**
-	 * Chaincode invocation in channel
-	 * @param chName - channel name, specified in {@link Chaincode#channel()}
-	 * @param ccName - chaincode name, specified in in {@link Chaincode#name()}
-	 * @param ccVer - chaincode version, specified in in {@link Chaincode#version()}
-	 * @param func - function name, as defined in repo interface
-	 * @param args - function arguments, as supplied in call to repo interface
-	 * @return - payload {@link ByteString} converted to {@link String}
-	 */
-	String invokeChaincode(String chName, String ccName, String ccVer, String func, String args[]) throws InvokeException;
+    /**
+     * Chaincode invocation in channel
+     *
+     * @param chName - channel name, specified in {@link Chaincode#channel()}
+     * @param ccName - chaincode name, specified in in {@link Chaincode#name()}
+     * @param ccVer  - chaincode version, specified in in {@link Chaincode#version()}
+     * @param func   - function name, as defined in repo interface
+     * @param args   - function arguments, as supplied in call to repo interface
+     * @return - payload {@link ByteString} converted to {@link String}
+     */
+    String invokeChaincode(String chName, String ccName, String ccVer, String func, String args[]) throws InvokeException;
 
-	/**
-	 * Querying chaincode in channel
-	 * @param chName - channel name, specified in {@link Chaincode#channel()}
-	 * @param ccName - chaincode name, specified in in {@link Chaincode#name()}
-	 * @param ccVer - chaincode version, specified in in {@link Chaincode#version()}
-	 * @param func - function name, as defined in repo interface
-	 * @param args - function arguments, as supplied in call to repo interface
-	 * @return - payload {@link ByteString} converted to {@link String}
-	 */
-	String invokeQuery(String chName, String ccName, String ccVer, String func, String args[]) throws QueryException;
+    /**
+     * Querying chaincode in channel
+     *
+     * @param chName - channel name, specified in {@link Chaincode#channel()}
+     * @param ccName - chaincode name, specified in in {@link Chaincode#name()}
+     * @param ccVer  - chaincode version, specified in in {@link Chaincode#version()}
+     * @param func   - function name, as defined in repo interface
+     * @param args   - function arguments, as supplied in call to repo interface
+     * @return - payload {@link ByteString} converted to {@link String}
+     */
+    String invokeQuery(String chName, String ccName, String ccVer, String func, String args[]) throws QueryException;
 
-	/**
-	 * Chaincode events listener for all components with {@link org.springframework.data.chaincode.events.ChaincodeEventListener} methods and corresponding channel and chaincode
-	 * @param chName - from {@link Chaincode#channel()}
-	 * @param ccName - from {@link Chaincode#name()} ()}
-	 */
-	void startChaincodeEventsListener(String chName, String ccName);
+    /**
+     * Chaincode events listener for all components with {@link org.springframework.data.chaincode.events.ChaincodeEventListener} methods and corresponding channel and chaincode
+     *
+     * @param chName - from {@link Chaincode#channel()}
+     * @param ccName - from {@link Chaincode#name()} ()}
+     */
+    void startChaincodeEventsListener(String chName, String ccName);
 
-	/**
-	 * Block events listener for all components with {@link org.springframework.data.chaincode.events.BlockEventListener} methods and corresponding channel
-	 * @param chName - from {@link org.springframework.data.chaincode.events.BlockEventListener#channel()}
-	 */
-	void startBlockEventsListener(String chName);
+    /**
+     * Block events listener for all components with {@link org.springframework.data.chaincode.events.BlockEventListener} methods and corresponding channel
+     *
+     * @param chName - from {@link org.springframework.data.chaincode.events.BlockEventListener#channel()}
+     */
+    void startBlockEventsListener(String chName);
 
 
 }

@@ -21,11 +21,11 @@ import org.springframework.data.chaincode.repository.ChaincodeInvoke;
 import org.springframework.data.chaincode.repository.ChaincodeQuery;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 
-@Chaincode(name="mycc5", version="1.0")
-public interface TestRepo5 extends ChaincodeRepository{
-	@ChaincodeInvoke
-	String invokeMethod(String arg1);
+@Chaincode(name = "mycc5", version = "1.0")
+public interface TestRepo5 extends ChaincodeRepository {
+    @ChaincodeInvoke
+    String invokeMethod(String arg1);
 
-	@ChaincodeQuery
-	String queryMethod(String arg1);
+    @ChaincodeQuery
+    String queryMethod(String arg1);
 }

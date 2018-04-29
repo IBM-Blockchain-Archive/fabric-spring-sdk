@@ -30,114 +30,127 @@ import java.util.List;
  * and chaincode event listeners from SDK
  */
 public class FabricEventsListenersRegistry {
-	private static final Logger logger = LoggerFactory.getLogger(FabricEventsListenersRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(FabricEventsListenersRegistry.class);
 
-	List<ChaincodeEventListenerEntry> chaincodeEventListeners = new ArrayList<>();
-	List<BlockEventListenerEntry> blockEventListeners = new ArrayList<>();
 
-	public FabricEventsListenersRegistry() {
-		logger.debug("Creating FabricEventsListenersRegistry instance");
-	}
+    List<ChaincodeEventListenerEntry> chaincodeEventListeners = new ArrayList<>();
+    List<BlockEventListenerEntry> blockEventListeners = new ArrayList<>();
 
-	void registerChaincodeEventListener(String chName, String ccName, String beanName, String methodName) {
-		ChaincodeEventListenerEntry entry = new ChaincodeEventListenerEntry(chName, ccName, beanName, methodName);
-		if (!isChaincodeEventListenerExist(entry)) {
-			chaincodeEventListeners.add(entry);
-		} else {
-			logger.warn("Listener for channel {} chaincode {} bean {} method {} already exist", chName, ccName, beanName, methodName);
-		}
-	}
+    public FabricEventsListenersRegistry() {
+        logger.debug("Creating FabricEventsListenersRegistry instance");
+    }
 
-	void registerBlockEventListener(String chName, String beanName, String methodName) {
-		BlockEventListenerEntry entry = new BlockEventListenerEntry(chName, beanName, methodName);
-		if (!isBlockEventListenerExist(entry)) {
-			blockEventListeners.add(entry);
-		} else {
-			logger.warn("Listener for channel {} bean {} method {} already exist", chName, beanName, methodName);
-		}
-	}
+    void registerChaincodeEventListener(String chName, String ccName, String beanName, String methodName) {
+        ChaincodeEventListenerEntry entry = new ChaincodeEventListenerEntry(chName, ccName, beanName, methodName);
+        if (!isChaincodeEventListenerExist(entry)) {
+            chaincodeEventListeners.add(entry);
+        } else {
+            logger.warn("Listener for channel {} chaincode {} bean {} method {} already exist", chName, ccName, beanName, methodName);
+        }
+    }
 
-	public void invokeChaincodeEventListener(String chName, String ccName, ChaincodeEvent event) throws Exception {
-		logger.debug("Invoking chaincode event listeners for channel {}, chaincode {} listeners number {}", chName, ccName, blockEventListeners.size());
-		for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
-			if (listenerEntry.chName.equals(chName) &&
-					listenerEntry.ccName.equals(ccName) ) {
-				logger.debug("Listener entry for channel {} chaincode {} invoked using bean {} method {}", chName, ccName, listenerEntry.beanName, listenerEntry.methodName);
-				listenerEntry.method.invoke(listenerEntry.bean, new Object[] {event});
-			}
-		}
-	}
+    void registerBlockEventListener(String chName, String beanName, String methodName) {
+        BlockEventListenerEntry entry = new BlockEventListenerEntry(chName, beanName, methodName);
+        if (!isBlockEventListenerExist(entry)) {
+            blockEventListeners.add(entry);
+        } else {
+            logger.warn("Listener for channel {} bean {} method {} already exist", chName, beanName, methodName);
+        }
+    }
 
-	public void invokeBlockEventListeners(String chName, BlockEvent event) throws Exception {
-		logger.debug("Invoking block event listeners for channel {}, listeners number {}", chName, blockEventListeners.size());
-		for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
-			if (listenerEntry.chName.equals(chName)) {
-				logger.debug("Listener entry for channel {} invoked using bean {} method {}", chName, listenerEntry.beanName, listenerEntry.methodName);
-				listenerEntry.method.invoke(listenerEntry.bean, new Object[] {event});
-			}
-		}
-	}
+    public void invokeChaincodeEventListener(String chName, String ccName, ChaincodeEvent event) throws Exception {
+        logger.debug("Invoking chaincode event listeners for channel {}, chaincode {} listeners number {}", chName, ccName, blockEventListeners.size());
+        for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
+            if (listenerEntry.chName.equals(chName) &&
+                    listenerEntry.ccName.equals(ccName)) {
+                logger.debug("Listener entry for channel {} chaincode {} invoked using bean {} method {}", chName, ccName, listenerEntry.beanName, listenerEntry.methodName);
+                listenerEntry.method.invoke(listenerEntry.bean, new Object[]{event});
+            }
+        }
+    }
 
-	private boolean isChaincodeEventListenerExist(ChaincodeEventListenerEntry entry) {
-		for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
-			if (listenerEntry.chName.equals(entry.chName) &&
-					listenerEntry.ccName.equals(entry.ccName) &&
-					listenerEntry.beanName.equals(entry.beanName) &&
-					listenerEntry.methodName.equals(entry.methodName)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public void invokeBlockEventListeners(String chName, BlockEvent event) throws Exception {
+        logger.debug("Invoking block event listeners for channel {}, listeners number {}", chName, blockEventListeners.size());
+        for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
+            if (listenerEntry.chName.equals(chName)) {
+                logger.debug("Listener entry for channel {} invoked using bean {} method {}", chName, listenerEntry.beanName, listenerEntry.methodName);
+                listenerEntry.method.invoke(listenerEntry.bean, new Object[]{event});
+            }
+        }
+    }
 
-	private boolean isBlockEventListenerExist(BlockEventListenerEntry entry) {
-		for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
-			if (listenerEntry.chName.equals(entry.chName) &&
-					listenerEntry.beanName.equals(entry.beanName) &&
-					listenerEntry.methodName.equals(entry.methodName)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean isChaincodeEventListenerExist(ChaincodeEventListenerEntry entry) {
+        for (ChaincodeEventListenerEntry listenerEntry : chaincodeEventListeners) {
+            if (listenerEntry.chName.equals(entry.chName) &&
+                    listenerEntry.ccName.equals(entry.ccName) &&
+                    listenerEntry.beanName.equals(entry.beanName) &&
+                    listenerEntry.methodName.equals(entry.methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public static class ChaincodeEventListenerEntry {
-		String chName;
-		String ccName;
-		String beanName;
-		String methodName;
+    private boolean isBlockEventListenerExist(BlockEventListenerEntry entry) {
+        for (BlockEventListenerEntry listenerEntry : blockEventListeners) {
+            if (listenerEntry.chName.equals(entry.chName) &&
+                    listenerEntry.beanName.equals(entry.beanName) &&
+                    listenerEntry.methodName.equals(entry.methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		Method method;
-		Object bean;
+    public static class ChaincodeEventListenerEntry {
+        String chName;
+        String ccName;
+        String beanName;
+        String methodName;
 
-		boolean registrated;
+        Method method;
+        Object bean;
 
-		public ChaincodeEventListenerEntry(String chName, String ccName, String beanName, String methodName) {
-			this.chName = chName;
-			this.ccName = ccName;
-			this.beanName = beanName;
-			this.methodName = methodName;
-			this.registrated = false;
-		}
-	}
+        boolean registrated;
 
-	public static class BlockEventListenerEntry {
-		String chName;
-		String beanName;
-		String methodName;
+        public ChaincodeEventListenerEntry(String chName, String ccName, String beanName, String methodName) {
+            this.chName = chName;
+            this.ccName = ccName;
+            this.beanName = beanName;
+            this.methodName = methodName;
+            this.registrated = false;
+        }
+    }
 
-		Method method;
-		Object bean;
+    public static class BlockEventListenerEntry {
+        String chName;
+        String beanName;
+        String methodName;
 
-		boolean registrated;
+        Method method;
+        Object bean;
 
-		public BlockEventListenerEntry(String chName, String beanName, String methodName) {
-			this.chName = chName;
-			this.beanName = beanName;
-			this.methodName = methodName;
-			this.registrated = false;
+        boolean registrated;
 
-		}
-	}
+        public BlockEventListenerEntry(String chName, String beanName, String methodName) {
+            this.chName = chName;
+            this.beanName = beanName;
+            this.methodName = methodName;
+            this.registrated = false;
+
+        }
+    }
+
+
+    /* For unit-test */
+    public List<ChaincodeEventListenerEntry> getChaincodeEventListeners() {
+        return chaincodeEventListeners;
+    }
+
+    /* For unit-test */
+    public List<BlockEventListenerEntry> getBlockEventListeners() {
+        return blockEventListeners;
+    }
+
 
 }
