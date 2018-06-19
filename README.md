@@ -31,11 +31,11 @@ Add the Maven dependency:
 
 ### Spring Data repository like interface
 
-Spring Data for Hyperledger Fabric provides Spring Repository like interface Hyperledger Fabric chaincode (smart contract). Fabric Chaincode initializes and manages the ledger state through transactions submitted by applications. For chaincode API explanation see [Chaincode Tutorials](http://hyperledger-fabric.readthedocs.io/en/release/chaincode.html) Chaincode expose to developer set of methods, part of them, like `instantiate` or `upgrade`, invoked in response to chaincode startup transactions and rest of the methods are chaincode application functions invoked as response to `invoke` transaction. In addition, part of Chaincode application functions can be invoked without resulting transaction (`query`) - they used to query state of the ledger.
+Spring Data for Hyperledger Fabric provides Spring Repository like interface Hyperledger Fabric chaincode (smart contract). Fabric Chaincode initializes and manages the ledger state through transactions submitted by applications. For chaincode API explanation see [Chaincode Tutorials](http://hyperledger-fabric.readthedocs.io/en/release-1.1/chaincode.html) Chaincode expose to developer set of methods, part of them, like `instantiate` or `upgrade`, invoked in response to chaincode startup transactions and rest of the methods are chaincode application functions invoked as response to `invoke` transaction. In addition, part of Chaincode application functions can be invoked without resulting transaction (`query`) - they used to query state of the ledger.
 
 From client application developer perspective, chaincode is remote piece of code, expose set of methods that can be invoked and those invocation change state of the ledger. To simplify the creation of data repositories Spring Data for Hyperledger Fabric provides a repository like programming model. It will automatically create a repository proxy for you that adds implementations of chaincode methods you specify on an interface.
 
-For example, given a [Simple Asset](http://hyperledger-fabric.readthedocs.io/en/release/chaincode4ade.html#simple-asset-chaincode) chaincode, a `SimpleAssetRepository` interface that can invoke `get` and `put` methods is shown below:
+For example, given a [Simple Asset](http://hyperledger-fabric.readthedocs.io/en/release-1.1/chaincode4ade.html#simple-asset-chaincode) chaincode, a `SimpleAssetRepository` interface that can invoke `get` and `put` methods is shown below:
 
 ```java
 @Chaincode(channel="mychannel", name="sacc", version="1.0")
@@ -109,7 +109,7 @@ In example above all you have to provide is client security credentials, the res
 
 `AbstractChaincodeConfiguration` above contains default location of peers: `peerLocations`, orderers - `ordererLocations` and event hub peers - `eventHubLocations`
  and configured to use “basic-network” sample as its limited development network. The network consists of a single peer node, a single “solo” ordering node, a certificate authority (CA) and a CLI container for executing commands, without TLS. 
-For more information see [Build your first network](http://hyperledger-fabric.readthedocs.io/en/release-1.0/build_network.html) and [Fabric Samples](https://github.com/hyperledger/fabric-samples)
+For more information see [Build your first network](http://hyperledger-fabric.readthedocs.io/en/release-1.1/build_network.html) and [Fabric Samples](http://hyperledger-fabric.readthedocs.io/en/release-1.1/samples.html)
 
 To use more robust network, like `first-network` from Fabric Samples, you have to enreach Java Configuration. In case of more that one peer/orderer,
 you should add/update `peerLocations`/`ordererLocations` beans and to use TLS while connecting to network, you should provide TLS configuration, including certificates for each peer/orderer you want to communicate. See first-network TLS example below
