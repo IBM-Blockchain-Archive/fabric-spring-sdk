@@ -48,7 +48,7 @@
 
     <!-- Spring -->
     <spring-framework.version>5.0.2.RELEASE</spring-framework.version>
-    <spring-data.version>2.1.0.BUILD-SNAPSHOT</spring-data.version>
+    <spring-data.version>2.1.0.M3</spring-data.version>
     <!-- Hibernate / JPA -->
     <hibernate.version>4.2.1.Final</hibernate.version>
 
