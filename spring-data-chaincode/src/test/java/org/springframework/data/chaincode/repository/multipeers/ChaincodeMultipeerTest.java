@@ -30,9 +30,9 @@ import java.io.File;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ChaincodeMultipeerTest {
 
-    @ClassRule
-    public static DockerComposeContainer env = new DockerComposeContainer(
-            new File("src/test/resources/first-network/docker-compose-cli.yaml")).withLocalCompose(false).withPull(false);
+//    @ClassRule
+//    public static DockerComposeContainer env = new DockerComposeContainer(
+//            new File("src/test/resources/first-network/docker-compose-cli.yaml")).withLocalCompose(false).withPull(false);
 
     @Autowired
     EventsRepo eventsRepo;
@@ -47,7 +47,7 @@ public class ChaincodeMultipeerTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
+//        DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
     }
 
     @AfterClass
