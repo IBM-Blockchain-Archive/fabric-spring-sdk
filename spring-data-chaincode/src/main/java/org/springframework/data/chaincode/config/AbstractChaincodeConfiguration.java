@@ -52,16 +52,4 @@ public abstract class AbstractChaincodeConfiguration {
         res.put("peer0", "grpc://localhost:7051");
         return res;
     }
-
-    /**
-     * @return of event hubs, usually runs as part of peers, accessible to client
-     */
-    @Bean(name = "eventHubLocations")
-    public Map<String, String> eventHubLocations() {
-        final Map<String, String> res = new HashMap<>();
-        res.put("peer0", "grpc://localhost:7053");
-        return res;
-    }
-
-
 }

@@ -47,13 +47,6 @@ public class TestConfig extends AbstractChaincodeConfiguration {
     }
 
     @Override
-    @Bean(name = "eventHubLocations")
-    public Map<String, String> eventHubLocations() {
-        final Map<String, String> res = new HashMap<>();
-        return res;
-    }
-
-    @Override
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
@@ -81,9 +74,8 @@ public class TestConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "peerProperties")
     public Map<String, Properties> peerProperties() throws IOException {
         Properties peer0Properties = new Properties();
-//        String peer0PemFileLocation = "first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt";
-//        File peer0PemFile = new File(getClass().getClassLoader().getResource(peer0PemFileLocation).getFile());
-        File peer0PemFile = new File("/Users/gennady/Development/Blockchain/Hyperledger/gopath/src/github.com/hyperledger/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt");
+        String peer0PemFileLocation = "first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt";
+        File peer0PemFile = new File(getClass().getClassLoader().getResource(peer0PemFileLocation).getFile());
         peer0Properties.setProperty("pemFile", peer0PemFile.getCanonicalPath());
         peer0Properties.setProperty("hostnameOverride", "peer0.org1.example.com");
         peer0Properties.setProperty("sslProvider", "openSSL");
@@ -91,9 +83,8 @@ public class TestConfig extends AbstractChaincodeConfiguration {
 
 
         Properties peer1Properties = new Properties();
-//        String peer1PemFileLocation = "first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt";
-//        File peer1PemFile = new File(getClass().getClassLoader().getResource(peer1PemFileLocation).getFile());
-        File peer1PemFile = new File("/Users/gennady/Development/Blockchain/Hyperledger/gopath/src/github.com/hyperledger/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt");
+        String peer1PemFileLocation = "first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt";
+        File peer1PemFile = new File(getClass().getClassLoader().getResource(peer1PemFileLocation).getFile());
         peer1Properties.setProperty("pemFile", peer1PemFile.getCanonicalPath());
         peer1Properties.setProperty("hostnameOverride", "peer1.org1.example.com");
         peer1Properties.setProperty("sslProvider", "openSSL");
@@ -107,18 +98,14 @@ public class TestConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "/Users/gennady/Development/Blockchain/Hyperledger/gopath/src/github.com/hyperledger/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/1f737a2d658c94546d600a9e905079b955002a5acc306657c508c9ce05958616_sk";
-//        return "first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
-//                + "/keystore/0132e37e19156739cfe20e1a0cb952b9e0e7d24e091520b895b9d26e27ab729d_sk";
+        return "first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/06598da2a5c8268d5e09ff090136c411392fe5af949354b05a5bd8041ec1f8a5_sk";
     }
 
     @Bean(name = "userSigningCert")
     public String userSigningCert() {
-//        final String certificateFile = "first-network/crypto-config/peerOrganizations/org1.example.com/users"
-//                + "/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
-        final String certificateFile = "/Users/gennady/Development/Blockchain/Hyperledger/gopath/src/github.com/hyperledger/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
-//        try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
-        try (final InputStream in = new FileInputStream(new File(certificateFile))) {
+        final String certificateFile = "first-network/crypto-config/peerOrganizations/org1.example.com/users"
+                + "/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
+        try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,10 +120,8 @@ public class TestConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "caCert")
     public String caCert() {
-//        final String certificateFile = "first-network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
-        final String certificateFile = "/Users/gennady/Development/Blockchain/Hyperledger/gopath/src/github.com/hyperledger/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
-//        try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
-        try (final InputStream in = new FileInputStream(new File(certificateFile))) {
+        final String certificateFile = "first-network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
+        try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,13 +17,13 @@ import java.nio.charset.Charset;
 public class TestConfigWrongPrivateKey extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
-                + "/keystore/c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83_sk1";
+        return "basic-network.1/crypto-config/peerOrganizations/org1.example.com/users" +
+                "/User1@org1.example.com/msp/keystore/0cd56151db5d102e209b295f16b562dd2fba7a41988341cd4a783a9f0520855f_sk";
     }
 
     @Bean(name = "userSigningCert")
     public String userSigningCert() {
-        final String certificateFile = "network/crypto-config/peerOrganizations/org1.example.com/users"
+        final String certificateFile = "basic-network/crypto-config/peerOrganizations/org1.example.com/users"
                 + "/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
         try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
             return IOUtils.toString(in, Charset.defaultCharset());
@@ -40,7 +40,7 @@ public class TestConfigWrongPrivateKey extends AbstractChaincodeConfiguration {
 
     @Bean(name = "caCert")
     public String caCert() {
-        final String certificateFile = "network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
+        final String certificateFile = "basic-network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
         try (final InputStream in = new FileInputStream(getClass().getClassLoader().getResource(certificateFile).getFile())) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {

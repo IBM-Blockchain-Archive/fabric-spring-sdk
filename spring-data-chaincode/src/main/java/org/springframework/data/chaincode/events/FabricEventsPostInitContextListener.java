@@ -51,7 +51,7 @@ public class FabricEventsPostInitContextListener implements ApplicationListener<
         for (FabricEventsListenersRegistry.BlockEventListenerEntry entry : registry.blockEventListeners) {
             logger.debug("Looking for bean {} method {} to listen to block events in channel {}", entry.beanName, entry.methodName, entry.chName);
             if (entry.registrated) {
-                logger.debug("Bean {} method {} to listen to block events in channel {} already registrated", entry.beanName, entry.methodName, entry.chName);
+                logger.debug("Bean {} method {} to listen to block events in channel {} already registered", entry.beanName, entry.methodName, entry.chName);
                 continue;
             }
             Object bean = context.getBean(entry.beanName);
@@ -76,7 +76,7 @@ public class FabricEventsPostInitContextListener implements ApplicationListener<
         for (FabricEventsListenersRegistry.ChaincodeEventListenerEntry entry : registry.chaincodeEventListeners) {
             logger.debug("Looking for bean {} method {} to listen to chaincode events in channel {} chaincode {}", entry.beanName, entry.methodName, entry.chName, entry.ccName);
             if (entry.registrated) {
-                logger.debug("Bean {} method {} to listen to chaincode events in channel {} chaincode {} already registrated", entry.beanName, entry.methodName, entry.chName, entry.ccName);
+                logger.debug("Bean {} method {} to listen to chaincode events in channel {} chaincode {} already registered", entry.beanName, entry.methodName, entry.chName, entry.ccName);
                 continue;
             }
             Object bean = context.getBean(entry.beanName);

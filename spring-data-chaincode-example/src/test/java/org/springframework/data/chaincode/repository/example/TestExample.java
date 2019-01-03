@@ -12,15 +12,16 @@ import java.io.File;
 public class TestExample {
     @ClassRule
     public static DockerComposeContainer env = new DockerComposeContainer(
-            new File("src/main/resources/network/docker-compose.yml")).withLocalCompose(false).withPull(false);
+            new File("src/main/resources/basic-network/docker-compose.yml")).withLocalCompose(false).withPull(false);
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        DockerUtils.waitForContainers(new String[]{"peer0"});
+        DockerUtils.waitForContainers(new String[]{"peer0"}, new String[]{"mycc"});
     }
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
+        DockerUtils.removeDevContainerAndImages();
     }
 
     @Test
