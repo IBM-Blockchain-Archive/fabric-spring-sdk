@@ -75,20 +75,12 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     private Map<String, String> peerLocations;
 
     @Autowired(required = false)
-    @Qualifier("eventHubLocations")
-    private Map<String, String> eventHubLocations;
-
-    @Autowired(required = false)
     @Qualifier("ordererProperties")
     private Map<String, Properties> ordererProperties;
 
     @Autowired(required = false)
     @Qualifier("peerProperties")
     private Map<String, Properties> peerProperties;
-
-    @Autowired(required = false)
-    @Qualifier("eventHubProperties")
-    private Map<String, Properties> eventHubProperties;
 
     @Autowired(required = false)
     @Qualifier("userSigningCert")
@@ -181,7 +173,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             client = HFClient.createNewInstance();
             client.setCryptoSuite(cryptoSuite);
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | CryptoException | InvalidArgumentException | NoSuchMethodException | InvocationTargetException e) {
-            logger.error("Exception during SDK clinet init", e);
+            logger.error("Exception during SDK client init", e);
             throw new InitException("Exception during SDK clinet init", e);
         }
     }
@@ -251,15 +243,6 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 }
             }
 
-            for (Map.Entry<String, String> eventHub : eventHubLocations.entrySet()) {
-                if (eventHubProperties != null && eventHubProperties.containsKey(eventHub.getKey())) {
-                    logger.debug("Adding eventHub {} with address {} and properties {}", eventHub.getKey(), eventHub.getValue(), eventHubProperties.get(eventHub.getKey()));
-                    channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue(), eventHubProperties.get(eventHub.getKey())));
-                } else {
-                    logger.debug("Adding eventHub {} with address {} ", eventHub.getKey(), eventHub.getValue());
-                    channel.addEventHub(client.newEventHub(eventHub.getKey(), eventHub.getValue()));
-                }
-            }
             for (Map.Entry<String, String> orderer : ordererLocations.entrySet()) {
                 if (ordererProperties != null && ordererProperties.containsKey(orderer.getKey())) {
                     logger.debug("Adding orderer {} with address {} and properties {}", orderer.getKey(), orderer.getValue(), ordererProperties.get(orderer.getKey()));
@@ -317,19 +300,29 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 throw new InvokeException(String.format("Invalid proposal %s", proposal));
             }
         }
+
         // Sending transaction to orderers
         logger.debug("Sending transaction for {} {}", func, args == null ? null : Arrays.asList(args));
+        Channel.NOfEvents nofEvents = Channel.NOfEvents.createNofEvents();
         CompletableFuture<BlockEvent.TransactionEvent> txFuture;
         try {
-            txFuture = getChannel(chName).sendTransaction(responses);
+            if (!getChannel(chName).getPeers(EnumSet.of(Peer.PeerRole.EVENT_SOURCE)).isEmpty()) {
+                nofEvents.addPeers(getChannel(chName).getPeers(EnumSet.of(Peer.PeerRole.EVENT_SOURCE)));
+            }
+            txFuture = getChannel(chName).sendTransaction(responses,
+                    Channel.TransactionOptions.createTransactionOptions()
+                            .orderers(getChannel(chName).getOrderers())
+                            .shuffleOrders(false)
+                            .nOfEvents(nofEvents));
         } catch (InvalidArgumentException | TransactionException e) {
             logger.warn("Exception during send transaction", e);
             throw new InvokeException("During send transaction", e);
         }
 
+
         BlockEvent.TransactionEvent event = null;
         try {
-            event = txFuture.get(5000, TimeUnit.MILLISECONDS);
+            event = txFuture.get(120000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             logger.warn("Exception during wait for transaction event", e);
             throw new InvokeException("Exception during wait", e);
@@ -348,7 +341,6 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 return resp.getProposalResponse().getResponse().getPayload().toStringUtf8();
             }
         }
-
         return null;
     }
 
@@ -391,7 +383,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         for (ProposalResponse resp : responses) {
             if (resp.getProposalResponse() == null || resp.getProposalResponse().getResponse() == null) {
                 logger.warn("Wrong proposal response {} from peer {}", resp, resp.getPeer().getName());
-                exc = new QueryException("Wrong proposal response");
+                exc = new QueryException("Wrong proposal response " + resp + " from peer " + resp.getPeer().getName());
                 continue;
             }
             if (resp.getProposalResponse().getResponse().getStatus() == Status.SUCCESS.getNumber()) {
@@ -413,7 +405,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     public void startChaincodeEventsListener(final String chName, final String ccName) throws EventException {
         if (chaincodeListenerChannelsAndChaincodes.containsKey(chName) &&
                 chaincodeListenerChannelsAndChaincodes.get(chName).contains(ccName)) {
-            logger.info("SDK listener for channel {} and chaincode {} already registrated", chName, ccName);
+            logger.info("SDK listener for channel {} and chaincode {} already registered", chName, ccName);
         }
 
         try {
@@ -424,7 +416,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         }
         final Map<String, Long> handledChaincodeEvents = new HashMap<>();
 
-        logger.debug("Registrating listener for channel {} and chaincode {}", chName, ccName);
+        logger.debug("Registering listener for channel {} and chaincode {}", chName, ccName);
         try {
             final Channel channel = getChannel(chName);
             channel.registerChaincodeEventListener(Pattern.compile(ccName), Pattern.compile(".*"), new org.hyperledger.fabric.sdk.ChaincodeEventListener() {
@@ -456,7 +448,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
     @Override
     public void startBlockEventsListener(final String chName) throws EventException {
         if (blockListenerChannels.contains(chName)) {
-            logger.info("SDK listener for channel {} already registrated", chName);
+            logger.info("SDK listener for channel {} already registered", chName);
             return;
         }
         try {
@@ -489,8 +481,8 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             });
             blockListenerChannels.add(chName);
         } catch (InvalidArgumentException | TransactionException e) {
-            logger.warn("Exception during event registartion", e);
-            throw new EventException("Exception during event registartion", e);
+            logger.warn("Exception during event registration", e);
+            throw new EventException("Exception during event registration", e);
         }
 
         return;

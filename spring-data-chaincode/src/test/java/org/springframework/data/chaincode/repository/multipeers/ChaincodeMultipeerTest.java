@@ -47,11 +47,12 @@ public class ChaincodeMultipeerTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        DockerUtils.waitForContainers(new String[]{"peer0", "peer1"});
+        DockerUtils.waitForContainers(new String[]{"peer0", "peer1"}, new String[]{"mycc", "eventcc"});
     }
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
+        DockerUtils.removeDevContainerAndImages();
     }
 
     @Test

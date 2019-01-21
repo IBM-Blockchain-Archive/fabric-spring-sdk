@@ -47,13 +47,6 @@ public class TestConfig extends AbstractChaincodeConfiguration {
     }
 
     @Override
-    @Bean(name = "eventHubLocations")
-    public Map<String, String> eventHubLocations() {
-        final Map<String, String> res = new HashMap<>();
-        return res;
-    }
-
-    @Override
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
@@ -96,9 +89,6 @@ public class TestConfig extends AbstractChaincodeConfiguration {
         peer1Properties.setProperty("hostnameOverride", "peer1.org1.example.com");
         peer1Properties.setProperty("sslProvider", "openSSL");
         peer1Properties.setProperty("negotiationType", "TLS");
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
 
         final Map<String, Properties> propertiesMap = new HashMap<>();
         propertiesMap.put("peer0", peer0Properties);
@@ -108,8 +98,7 @@ public class TestConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
-                + "/keystore/0132e37e19156739cfe20e1a0cb952b9e0e7d24e091520b895b9d26e27ab729d_sk";
+        return "first-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/06598da2a5c8268d5e09ff090136c411392fe5af949354b05a5bd8041ec1f8a5_sk";
     }
 
     @Bean(name = "userSigningCert")

@@ -51,8 +51,7 @@ public class TestConfigWithKeyStore {
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "network/crypto-config/peerOrganizations/org1.example.com/users"
-                + "/User1@org1.example.com/msp/keystore/c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83_sk";
+        return "basic-network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/0cd56151db5d102e209b295f16b562dd2fba7a41988341cd4a783a9f0520855f_sk";
     }
 
     @Bean(name = "mspId")
@@ -62,7 +61,7 @@ public class TestConfigWithKeyStore {
 
     @Bean(name = "keyStoreLocation")
     public String keyStoreLocation() {
-        return "network/crypto-config/certificates.jks";
+        return "basic-network/crypto-config/certificates.jks";
     }
 
     @Bean

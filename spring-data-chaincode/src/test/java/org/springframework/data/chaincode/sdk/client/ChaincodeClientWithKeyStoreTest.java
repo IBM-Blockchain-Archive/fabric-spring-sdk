@@ -16,6 +16,7 @@
 
 package org.springframework.data.chaincode.sdk.client;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -36,14 +37,19 @@ public class ChaincodeClientWithKeyStoreTest {
 
     @ClassRule
     public static DockerComposeContainer env = new DockerComposeContainer(
-            new File("src/test/resources/network/docker-compose.yml")
+            new File("src/test/resources/basic-network/docker-compose.yml")
     )
             .withLocalCompose(false)
             .withPull(false);
 
     @BeforeClass
     public static void setUp() throws Exception {
-        DockerUtils.waitForContainers(new String[]{"peer0"});
+        DockerUtils.waitForContainers(new String[]{"peer0"}, new String[]{"mycc"});
+    }
+
+    @AfterClass
+    public static void shutDown() throws Exception {
+        DockerUtils.removeDevContainerAndImages();
     }
 
     @Autowired
